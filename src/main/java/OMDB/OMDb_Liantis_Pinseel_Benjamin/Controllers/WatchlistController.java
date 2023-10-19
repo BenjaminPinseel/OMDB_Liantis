@@ -21,8 +21,7 @@ public class WatchlistController {
 
     @GetMapping("/{id}")
     public WatchlistResponseDto findById(@RequestParam String id){
-        Watchlist watchlist = watchlistService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Watchlist with this ID was not found."));
-        return mapper.MapWatchlistToWatchlistResponseDto(watchlist);
+        return watchlistService.findById(id);
     }
     @PostMapping()
     @ResponseStatus(value = HttpStatus.CREATED)

@@ -1,10 +1,9 @@
 package OMDB.OMDb_Liantis_Pinseel_Benjamin.Services;
 
-import OMDB.OMDb_Liantis_Pinseel_Benjamin.Dto.UserCreateDto;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.Dto.MovieDto;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.Dto.WatchlistCreateDto;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.Dto.WatchlistResponseDto;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.Dto.WatchlistUpdateRequestDto;
-import OMDB.OMDb_Liantis_Pinseel_Benjamin.Entities.User;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.Entities.Watchlist;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.Exceptions.DataValidationException;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.Exceptions.ResourceNotFoundException;
@@ -21,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,8 +28,20 @@ public class WatchlistService {
     private WatchlistRepository watchlistRepository;
     private Mapper mapper;
 
-    public Optional<Watchlist> findById(String id){
-        return watchlistRepository.findById(id);
+    public WatchlistResponseDto findById(String id){
+        Optional<Watchlist> optionalWatchlist = Optional.ofNullable(watchlistRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Watchlist with this ID was not found.")));
+        if (optionalWatchlist.isPresent()){
+            WatchlistResponseDto watchlistResponseDto = mapper.mapWatchlistToWatchlistResponseDto(optionalWatchlist.get());
+            List<MovieDto> movieDtos = optionalWatchlist.get().getMovieIds().stream().map(movieId -> {
+                MovieDto movieDto =  new MovieDto();
+                movieDto.setImdbID(movieId);
+                return movieDto;
+            }).collect(Collectors.toList());
+
+            watchlistResponseDto.setMovieDtos(movieDtos);
+            return watchlistResponseDto;
+        }
+        return null;
     }
 
     public void save(WatchlistCreateDto watchlistCreateDto) {

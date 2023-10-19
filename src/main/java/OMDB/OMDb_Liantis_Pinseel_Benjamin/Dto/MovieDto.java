@@ -1,22 +1,18 @@
-package OMDB.OMDb_Liantis_Pinseel_Benjamin.Entities;
+package OMDB.OMDb_Liantis_Pinseel_Benjamin.Dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
-@Entity
 @Getter
-public class Movie {
-    @Id
-    @NotNull
+@Setter
+public class MovieDto {
+
     private String imdbID;
 
-    @NotNull
     private String Title;
 
     private int Year;
@@ -45,7 +41,7 @@ public class Movie {
 
     private URL Poster;
 
-    private List<Rating> Ratings;
+    private List<RatingDto> ratingDtos;
 
     private int Metascore;
 

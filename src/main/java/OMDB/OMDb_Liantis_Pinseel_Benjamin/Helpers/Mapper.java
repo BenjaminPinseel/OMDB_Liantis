@@ -41,13 +41,6 @@ public class Mapper {
                 .build();
     }
 
-    public WatchlistResponseDto MapWatchlistToWatchlistResponseDto(Watchlist watchlist) {
-        return WatchlistResponseDto.builder()
-                .title(watchlist.getTitle())
-                .description(watchlist.getDescription())
-                .build();
-    }
-
     public Watchlist mapWatchlistCreateDtoToWatchlist(WatchlistCreateDto watchlistCreateDto) {
             return Watchlist.builder()
                     .title(watchlistCreateDto.getTitle())
