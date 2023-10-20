@@ -1,5 +1,6 @@
 package OMDB.OMDb_Liantis_Pinseel_Benjamin.Dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,51 +14,72 @@ public class MovieDto {
 
     private String imdbID;
 
-    private String Title;
+    @JsonProperty("Title")
+    private String title;
 
-    private int Year;
+    @JsonProperty("Year")
+    private int year;
 
-    private String Rated;
+    @JsonProperty("Rated")
+    private String rated;
 
-    private Date Released;
+    @JsonProperty("Released")
+    private Date released;
 
-    private String Runtime;
+    @JsonProperty("Runtime")
+    private String runtime;
 
-    private String Genre;
+    @JsonProperty("Genre")
+    private String genre;
 
-    private String Director;
+    @JsonProperty("Director")
+    private String director;
 
-    private String Writer;
+    @JsonProperty("Writer")
+    private String writer;
 
-    private String Actors;
+    @JsonProperty("Actors")
+    private String actors;
 
-    private String Plot;
+    @JsonProperty("Plot")
+    private String plot;
 
-    private String Language;
+    @JsonProperty("Language")
+    private String language;
 
-    private String Country;
+    @JsonProperty("Country")
+    private String country;
 
-    private String Awards;
+    @JsonProperty("Awards")
+    private String awards;
 
-    private URL Poster;
+    @JsonProperty("Poster")
+    private URL poster;
 
+    @JsonProperty("Ratings")
     private List<RatingDto> ratingDtos;
 
-    private int Metascore;
+    @JsonProperty("Metascore")
+    private int metascore;
 
     private float imdbRating;
 
     private long imdbVotes;
 
-    private String Type;
+    @JsonProperty("Type")
+    private String type;
 
     private Date DVD;
 
-    private String BoxOffice;
+    @JsonProperty("BoxOffice")
+    private String boxOffice;
 
-    private String Production;
+    @JsonProperty("Production")
+    private String production;
 
-    private URL Website;
+    @JsonProperty("Website")
+    private URL website;
 
-    private Boolean Response;
+    @JsonProperty("Response")
+    private boolean response;
 }

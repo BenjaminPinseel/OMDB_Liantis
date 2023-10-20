@@ -14,10 +14,9 @@ public class EncryptionUtils {
 
     @Autowired
     public EncryptionUtils(@Value("${api.password}") String password, @Value("${api.salt}") String salt) {
-        this.password = password;
-        this.salt = salt;
+        EncryptionUtils.password = password;
+        EncryptionUtils.salt = salt;
     }
-
 
 
     public static String encrypt(String apiKey) {

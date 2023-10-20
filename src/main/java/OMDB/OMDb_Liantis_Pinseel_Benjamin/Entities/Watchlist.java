@@ -1,7 +1,7 @@
 package OMDB.OMDb_Liantis_Pinseel_Benjamin.Entities;
 
-import OMDB.OMDb_Liantis_Pinseel_Benjamin.Dto.MovieDto;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Builder (builderClassName = "WatchlistBuilder")
+@Builder(builderClassName = "WatchlistBuilder")
 public class Watchlist {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -26,19 +26,24 @@ public class Watchlist {
     @Size(min = 1, max = 500)
     private String description;
 
-    @ElementCollection(targetClass =  String.class)
+    @ElementCollection(targetClass = String.class)
     @CollectionTable(name = "watchlist_movie", joinColumns = @JoinColumn(name = "watchlist_id"))
     @JoinColumn(name = "movie_id")
     private List<String> movieIds;
 
+    @Setter
+    @NotNull
+    private String userId;
 
-    public static class WatchlistBuilder{
+
+    public static class WatchlistBuilder {
         public String title;
         public String description;
+        public String userId;
 
 
-        public Watchlist build(){
-            return new Watchlist(null,title,description, null);
+        public Watchlist build() {
+            return new Watchlist(null, title, description, null, userId);
         }
     }
 }

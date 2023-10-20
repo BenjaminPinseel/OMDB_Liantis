@@ -2,12 +2,15 @@ package OMDB.OMDb_Liantis_Pinseel_Benjamin.Services;
 
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.Dto.UserCreateDto;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.Dto.UserUpdateRequestDto;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.Entities.User;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.Exceptions.DataValidationException;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.Exceptions.ResourceNotFoundException;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.Helpers.Mapper;
-import OMDB.OMDb_Liantis_Pinseel_Benjamin.Entities.User;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.Repositories.UserRepository;
-import jakarta.validation.*;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,17 +27,18 @@ public class UserService {
     private final UserRepository userRepository;
     private final Mapper mapper;
 
-    public Page findAll(int page, int amountPerPage){
+    public Page findAll(int page, int amountPerPage) {
         PageRequest pageable = PageRequest.of(
                 page, amountPerPage
         );
         return userRepository.findAll(pageable);
     }
-    public Optional<User> findById(String id){
+
+    public Optional<User> findById(String id) {
         return userRepository.findById(id);
     }
 
-    public void save(UserCreateDto newUser){
+    public void save(UserCreateDto newUser) {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
         Set<ConstraintViolation<UserCreateDto>> violations = validator.validate(newUser);
@@ -63,7 +67,8 @@ public class UserService {
         userRepository.save(user);
         return user;
     }
-    public void deleteById(String id){
+
+    public void deleteById(String id) {
         userRepository.deleteById(id);
     }
 }

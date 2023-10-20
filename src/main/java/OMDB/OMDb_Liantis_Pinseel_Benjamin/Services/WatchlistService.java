@@ -1,9 +1,6 @@
 package OMDB.OMDb_Liantis_Pinseel_Benjamin.Services;
 
-import OMDB.OMDb_Liantis_Pinseel_Benjamin.Dto.MovieDto;
-import OMDB.OMDb_Liantis_Pinseel_Benjamin.Dto.WatchlistCreateDto;
-import OMDB.OMDb_Liantis_Pinseel_Benjamin.Dto.WatchlistResponseDto;
-import OMDB.OMDb_Liantis_Pinseel_Benjamin.Dto.WatchlistUpdateRequestDto;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.Dto.*;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.Entities.Watchlist;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.Exceptions.DataValidationException;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.Exceptions.ResourceNotFoundException;
@@ -28,12 +25,12 @@ public class WatchlistService {
     private WatchlistRepository watchlistRepository;
     private Mapper mapper;
 
-    public WatchlistResponseDto findById(String id){
+    public WatchlistResponseDto findById(String id) {
         Optional<Watchlist> optionalWatchlist = Optional.ofNullable(watchlistRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Watchlist with this ID was not found.")));
-        if (optionalWatchlist.isPresent()){
+        if (optionalWatchlist.isPresent()) {
             WatchlistResponseDto watchlistResponseDto = mapper.mapWatchlistToWatchlistResponseDto(optionalWatchlist.get());
             List<MovieDto> movieDtos = optionalWatchlist.get().getMovieIds().stream().map(movieId -> {
-                MovieDto movieDto =  new MovieDto();
+                MovieDto movieDto = new MovieDto();
                 movieDto.setImdbID(movieId);
                 return movieDto;
             }).collect(Collectors.toList());
@@ -62,11 +59,37 @@ public class WatchlistService {
         }
     }
 
-    public Watchlist update(String id, WatchlistUpdateRequestDto watchlistUpdateRequestDto) {
-        Watchlist watchlist = watchlistRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User with this ID was not found."));
+    public Watchlist update(WatchlistUpdateRequestDto watchlistUpdateRequestDto) {
+        Watchlist watchlist = watchlistRepository.findById(watchlistUpdateRequestDto.getId()).orElseThrow(() -> new ResourceNotFoundException("User with this ID was not found."));
         watchlist.setTitle(watchlistUpdateRequestDto.getTitle());
         watchlist.setDescription(watchlistUpdateRequestDto.getDescription());
         watchlistRepository.save(watchlist);
         return watchlist;
+    }
+
+    public Watchlist addMovie(WatchlistMovieRequestDto watchlistMovieRequestDto) {
+        Watchlist watchlist = watchlistRepository.findById(watchlistMovieRequestDto.getWatchlistId()).orElseThrow(() -> new ResourceNotFoundException("User with this ID was not found."));
+        if (watchlist.getUserId() != watchlistMovieRequestDto.getUserId()){
+            return null;
+        }
+        else{
+            watchlist.getMovieIds().add(watchlistMovieRequestDto.getMovieId());
+            watchlistRepository.save(watchlist);
+            return watchlist;
+        }
+    }
+    public Watchlist removeMovie(WatchlistMovieRequestDto watchlistMovieRequestDto){
+        Watchlist watchlist = watchlistRepository.findById(watchlistMovieRequestDto.getWatchlistId()).orElseThrow(() -> new ResourceNotFoundException("User with this ID was not found."));
+        if (watchlist.getUserId() != watchlistMovieRequestDto.getUserId()){
+            return null;
+        }
+        else{
+            watchlist.getMovieIds().removeIf(id -> id.equals(watchlistMovieRequestDto.getMovieId()));
+            return watchlist;
+        }
+    }
+
+    public void deleteById(String id) {
+        watchlistRepository.deleteById(id);
     }
 }

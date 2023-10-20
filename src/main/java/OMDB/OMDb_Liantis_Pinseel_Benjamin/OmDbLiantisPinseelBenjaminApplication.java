@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class OmDbLiantisPinseelBenjaminApplication {
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		SpringApplication.run(OmDbLiantisPinseelBenjaminApplication.class, args);
+        SpringApplication.run(OmDbLiantisPinseelBenjaminApplication.class, args);
 
-	}
+    }
 
 }

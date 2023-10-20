@@ -24,6 +24,7 @@ public class Mapper {
 
         );
     }
+
     public UserResponseDto mapUserToUserResponseDto(User user) {
         return UserResponseDto.builder()
                 .firstName(user.getFirstName())
@@ -32,7 +33,8 @@ public class Mapper {
                 .age(user.getAge())
                 .build();
     }
-    public User mapUserCreateDtoToUser(UserCreateDto userCreateDto){
+
+    public User mapUserCreateDtoToUser(UserCreateDto userCreateDto) {
         return User.builder()
                 .firstName(userCreateDto.getFirstName())
                 .lastName(userCreateDto.getLastName())
@@ -42,10 +44,10 @@ public class Mapper {
     }
 
     public Watchlist mapWatchlistCreateDtoToWatchlist(WatchlistCreateDto watchlistCreateDto) {
-            return Watchlist.builder()
-                    .title(watchlistCreateDto.getTitle())
-                    .description(watchlistCreateDto.getDescription())
-                    .build();
+        return Watchlist.builder()
+                .title(watchlistCreateDto.getTitle())
+                .description(watchlistCreateDto.getDescription())
+                .build();
     }
 
     public WatchlistResponseDto mapWatchlistToWatchlistResponseDto(Watchlist updatedWatchlist) {

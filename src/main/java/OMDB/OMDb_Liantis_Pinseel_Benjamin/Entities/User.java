@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Getter
-@Builder (builderClassName = "UserBuilder")
+@Builder(builderClassName = "UserBuilder")
 @Entity
 @Table(name = "app_user", schema = "omdb")
 @AllArgsConstructor
@@ -42,15 +42,15 @@ public class User {
     @Email
     public String email;
 
-    public static class UserBuilder{
+    public static class UserBuilder {
         public String firstName;
         public String lastName;
         public String nickName;
         public int age;
         public String email;
 
-        public User build(){
-            return new User(null,firstName,lastName,nickName, age, email);
+        public User build() {
+            return new User(null, firstName, lastName, nickName, age, email);
         }
     }
 }
