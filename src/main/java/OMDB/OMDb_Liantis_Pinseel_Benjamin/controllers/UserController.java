@@ -12,16 +12,17 @@ import OMDB.OMDb_Liantis_Pinseel_Benjamin.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/user")
 @RequiredArgsConstructor
+@Validated
 public class UserController {
     private final UserService userService;
     private final UserMapper mapper;
     private final EncryptionUtils encryptionUtils;
-
 
 
     @GetMapping("/get")

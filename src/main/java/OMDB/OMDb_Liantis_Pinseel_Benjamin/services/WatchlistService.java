@@ -8,10 +8,8 @@ import OMDB.OMDb_Liantis_Pinseel_Benjamin.entities.Watchlist;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.exceptions.ResourceNotFoundException;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.mappers.WatchlistMapper;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.repositories.WatchlistRepository;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
 import java.util.Optional;
 import java.util.Set;
@@ -19,10 +17,9 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Validated
 public class WatchlistService {
-    private WatchlistRepository watchlistRepository;
-    private WatchlistMapper watchlistMapper;
+    private final WatchlistRepository watchlistRepository;
+    private final WatchlistMapper watchlistMapper;
 
     public WatchlistResponseDto findById(String id) {
         Optional<Watchlist> optionalWatchlist = Optional.ofNullable(watchlistRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Watchlist with this ID was not found.")));
@@ -34,13 +31,14 @@ public class WatchlistService {
                 return movieDto;
             }).collect(Collectors.toSet());
 
+
             watchlistResponseDto.setMovieDtos(movieDtos);
             return watchlistResponseDto;
         }
         return null;
     }
 
-    public void save(@Valid WatchlistCreateDto watchlistCreateDto, String userId) {
+    public void save(WatchlistCreateDto watchlistCreateDto, String userId) {
         Watchlist watchlist = Watchlist.builder()
                 .title(watchlistCreateDto.getTitle())
                 .description(watchlistCreateDto.getDescription())

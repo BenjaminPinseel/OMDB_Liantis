@@ -1,8 +1,9 @@
 package OMDB.OMDb_Liantis_Pinseel_Benjamin.mappers;
 
-import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.*;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.PageDto;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.UserCreateDto;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.UserResponseDto;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.entities.User;
-import OMDB.OMDb_Liantis_Pinseel_Benjamin.entities.Watchlist;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 

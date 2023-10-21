@@ -4,6 +4,7 @@ import OMDB.OMDb_Liantis_Pinseel_Benjamin.clients.MovieClient;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.MovieDto;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.entities.OmdbFilters;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.helpers.EncryptionUtils;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,10 +21,15 @@ public class MovieService {
     @Value("${encrypted.api.key}")
     private String encryptedApiKey;
 
-    private String decryptedApiKey = encryptionUtils.decrypt(encryptedApiKey);
+    private String decryptedApiKey;
 
-    Optional<MovieDto> findByFilters(OmdbFilters filters) {
-        if (decryptedApiKey == null){
+    @PostConstruct
+    public void init() {
+        decryptedApiKey = EncryptionUtils.decrypt(encryptedApiKey);
+    }
+
+    public Optional<MovieDto> findByFilters(OmdbFilters filters) {
+        if (decryptedApiKey == null) {
             throw new NullPointerException("API key was not found");
         }
         if (filters.getImdbId() == null && filters.getTitle() == null) {
@@ -35,7 +41,7 @@ public class MovieService {
     }
 
     public MovieDto findById(String id) {
-        if (decryptedApiKey == null){
+        if (decryptedApiKey == null) {
             throw new NullPointerException("API key was not found");
         }
         return movieClient.findById(decryptedApiKey, id);

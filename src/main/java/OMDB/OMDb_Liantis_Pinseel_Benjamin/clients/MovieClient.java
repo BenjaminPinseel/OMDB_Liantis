@@ -1,10 +1,6 @@
 package OMDB.OMDb_Liantis_Pinseel_Benjamin.clients;
 
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.MovieDto;
-import OMDB.OMDb_Liantis_Pinseel_Benjamin.entities.OmdbFilters;
-import OMDB.OMDb_Liantis_Pinseel_Benjamin.helpers.EncryptionUtils;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

@@ -2,6 +2,7 @@ package OMDB.OMDb_Liantis_Pinseel_Benjamin.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+
 import java.net.URL;
 import java.util.Date;
 import java.util.Set;

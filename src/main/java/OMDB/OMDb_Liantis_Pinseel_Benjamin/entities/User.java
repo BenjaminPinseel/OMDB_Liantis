@@ -10,7 +10,7 @@ import lombok.*;
 @Getter
 @Builder(builderClassName = "UserBuilder")
 @Entity
-@Table(name = "app_user", schema = "omdb")
+@Table(name = "app_user", schema = "omdb" )
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
@@ -22,16 +22,19 @@ public class User {
     @Setter
     @NotNull
     @Size(min = 1, max = 50)
+    @Column(name = "firstname")
     public String firstName;
 
     @Setter
     @NotNull
     @Size(min = 1, max = 50)
+    @Column(name = "lastname")
     public String lastName;
 
     @Setter
     @NotNull
     @Size(min = 1, max = 50)
+    @Column(name = "nickname")
     public String nickName;
 
     @Setter

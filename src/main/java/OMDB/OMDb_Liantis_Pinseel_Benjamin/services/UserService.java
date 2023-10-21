@@ -3,19 +3,16 @@ package OMDB.OMDb_Liantis_Pinseel_Benjamin.services;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.UserCreateDto;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.UserUpdateRequestDto;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.entities.User;
-import OMDB.OMDb_Liantis_Pinseel_Benjamin.exceptions.DataValidationException;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.exceptions.ResourceNotFoundException;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.mappers.UserMapper;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.repositories.UserRepository;
-import jakarta.validation.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
+
 import java.util.Optional;
 
-@Validated
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -33,15 +30,16 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public void save(@Valid UserCreateDto newUser) {
+    public void save(UserCreateDto newUser) {
 
-            User user = User.builder()
-                    .firstName(newUser.getFirstName())
-                    .lastName(newUser.getLastName())
-                    .age(newUser.getAge())
-                    .email(newUser.getEmail())
-                    .build();
-            userRepository.save(user);
+        User user = User.builder()
+                .firstName(newUser.getFirstName())
+                .lastName(newUser.getLastName())
+                .nickName(newUser.getNickName())
+                .age(newUser.getAge())
+                .email(newUser.getEmail())
+                .build();
+        userRepository.save(user);
     }
 
     public User update(String id, UserUpdateRequestDto newUserData) {
