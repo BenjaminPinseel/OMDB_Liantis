@@ -8,41 +8,36 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Getter
-@Builder(builderClassName = "UserBuilder")
+@Builder()
 @Entity
-@Table(name = "app_user", schema = "omdb" )
+@Table(name = "app_user")
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @NotNull
-    private String ID;
-
     @Setter
     @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "firstname")
     public String firstName;
-
     @Setter
     @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "lastname")
     public String lastName;
-
     @Setter
     @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "nickname")
     public String nickName;
-
     @Setter
     @Min(0)
     public int age;
-
     @Setter
     @Email
     public String email;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @NotNull
+    private String ID;
 
 }

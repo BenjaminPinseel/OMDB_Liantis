@@ -9,6 +9,7 @@ import OMDB.OMDb_Liantis_Pinseel_Benjamin.exceptions.ResourceNotFoundException;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.helpers.EncryptionUtils;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.mappers.UserMapper;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ public class UserController {
     private final EncryptionUtils encryptionUtils;
 
 
-    @GetMapping("/get")
+    @GetMapping()
     public PageDto<UserResponseDto> findAll(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int amountPerPage) {
         Page<User> userResult = this.userService.findAll(page, amountPerPage);
         return mapper.mapToPageDto(userResult);
@@ -40,12 +41,12 @@ public class UserController {
 
     @PostMapping()
     @ResponseStatus(value = HttpStatus.CREATED)
-    public void post(@RequestBody UserCreateDto newUser) {
+    public void post(@RequestBody @Valid UserCreateDto newUser) {
         this.userService.save(newUser);
     }
 
     @PutMapping()
-    public UserResponseDto put(@PathVariable String id, @RequestBody UserUpdateRequestDto userUpdateRequestDto) {
+    public UserResponseDto put(@PathVariable String id, @RequestBody @Valid UserUpdateRequestDto userUpdateRequestDto) {
         User updatedUser = this.userService.update(id, userUpdateRequestDto);
 
         return mapper.mapUserToUserResponseDto(updatedUser);

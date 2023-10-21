@@ -19,6 +19,7 @@ public class WatchlistMapper {
         return WatchlistResponseDto.builder()
                 .title(updatedWatchlist.getTitle())
                 .description(updatedWatchlist.getDescription())
+                .userId(updatedWatchlist.getUserId())
                 .build();
     }
 }

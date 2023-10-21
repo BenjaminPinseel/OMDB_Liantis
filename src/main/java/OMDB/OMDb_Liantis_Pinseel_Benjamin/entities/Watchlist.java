@@ -7,12 +7,12 @@ import lombok.*;
 
 import java.util.Set;
 
-@Table(schema = "omdb")
+@Table()
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Builder(builderClassName = "WatchlistBuilder")
+@Builder()
 public class Watchlist {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -28,7 +28,7 @@ public class Watchlist {
 
     @ElementCollection(targetClass = String.class)
     @CollectionTable(name = "watchlist_movie", joinColumns = @JoinColumn(name = "watchlist_id"))
-    @JoinColumn(name = "movie_id")
+    @Column(name = "movie_id")
     private Set<String> movieIds;
 
     @Setter

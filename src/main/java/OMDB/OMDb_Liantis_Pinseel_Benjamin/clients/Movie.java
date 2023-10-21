@@ -1,14 +1,13 @@
-package OMDB.OMDb_Liantis_Pinseel_Benjamin.dto;
+package OMDB.OMDb_Liantis_Pinseel_Benjamin.clients;
 
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.RatingDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import java.net.URL;
-import java.util.Date;
 import java.util.Set;
 
 @Data
-public class MovieDto {
+public class Movie {
 
     private String imdbID;
 
@@ -16,13 +15,13 @@ public class MovieDto {
     private String title;
 
     @JsonProperty("Year")
-    private int year;
+    private String year;
 
     @JsonProperty("Rated")
     private String rated;
 
     @JsonProperty("Released")
-    private Date released;
+    private String released;
 
     @JsonProperty("Runtime")
     private String runtime;
@@ -52,22 +51,22 @@ public class MovieDto {
     private String awards;
 
     @JsonProperty("Poster")
-    private URL poster;
+    private String poster;
 
     @JsonProperty("Ratings")
     private Set<RatingDto> ratingDtos;
 
     @JsonProperty("Metascore")
-    private int metascore;
+    private String metascore;
 
-    private float imdbRating;
+    private String imdbRating;
 
-    private long imdbVotes;
+    private String imdbVotes;
 
     @JsonProperty("Type")
     private String type;
 
-    private Date DVD;
+    private String DVD;
 
     @JsonProperty("BoxOffice")
     private String boxOffice;
@@ -76,8 +75,8 @@ public class MovieDto {
     private String production;
 
     @JsonProperty("Website")
-    private URL website;
+    private String website;
 
     @JsonProperty("Response")
-    private boolean response;
+    private String response;
 }
