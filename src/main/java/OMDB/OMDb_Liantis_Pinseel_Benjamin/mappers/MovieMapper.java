@@ -1,8 +1,7 @@
 package OMDB.OMDb_Liantis_Pinseel_Benjamin.mappers;
 
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.clients.Movie;
-import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.MovieDetailedResponseDto;
-import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.MovieShortResponseDto;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.MovieResponseDto;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.PageDto;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -13,13 +12,13 @@ import java.util.stream.Collectors;
 @Component
 public class MovieMapper {
 
-    public PageDto<MovieDetailedResponseDto> mapToPageDtoDetailed(Page<Movie> moviesPage) {
-        Set<MovieDetailedResponseDto> movieResponseDtos = moviesPage.getContent()
+    public PageDto<MovieResponseDto> mapToPageDtoDetailed(Page<Movie> moviesPage) {
+        Set<MovieResponseDto> movieResponseDtos = moviesPage.getContent()
                 .stream()
-                .map(this::mapMovieToMovieDetailedResponseDto)
+                .map(this::mapMovieToDetailedMovieResponseDto)
                 .collect(Collectors.toSet());
 
-        return new PageDto<MovieDetailedResponseDto>(
+        return new PageDto<MovieResponseDto>(
                 moviesPage.getTotalPages(),
                 moviesPage.getTotalElements(),
                 movieResponseDtos
@@ -27,13 +26,13 @@ public class MovieMapper {
         );
     }
 
-    public PageDto<MovieShortResponseDto> mapToPageDtoShort(Page<Movie> moviesPage) {
-        Set<MovieShortResponseDto> movieResponseDtos = moviesPage.getContent()
+    public PageDto<MovieResponseDto> mapToPageDtoShort(Page<Movie> moviesPage) {
+        Set<MovieResponseDto> movieResponseDtos = moviesPage.getContent()
                 .stream()
                 .map(this::mapMovieToMovieShortResponseDto)
                 .collect(Collectors.toSet());
 
-        return new PageDto<MovieShortResponseDto>(
+        return new PageDto<MovieResponseDto>(
                 moviesPage.getTotalPages(),
                 moviesPage.getTotalElements(),
                 movieResponseDtos
@@ -41,8 +40,8 @@ public class MovieMapper {
         );
     }
 
-    public MovieShortResponseDto mapMovieToMovieShortResponseDto(Movie movie) {
-        return MovieShortResponseDto.builder()
+    public MovieResponseDto mapMovieToMovieShortResponseDto(Movie movie) {
+        return MovieResponseDto.builder()
                 .actors(movie.getActors())
                 .country(movie.getCountry())
                 .director(movie.getDirector())
@@ -53,11 +52,12 @@ public class MovieMapper {
                 .year(movie.getYear())
                 .plot(movie.getPlot())
                 .type(movie.getType())
+                .rated(movie.getRated())
                 .build();
     }
 
-    public MovieDetailedResponseDto mapMovieToMovieDetailedResponseDto(Movie movie) {
-        return MovieDetailedResponseDto.builder()
+    public MovieResponseDto mapMovieToDetailedMovieResponseDto(Movie movie) {
+        return MovieResponseDto.builder()
                 .actors(movie.getActors())
                 .country(movie.getCountry())
                 .director(movie.getDirector())

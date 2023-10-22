@@ -7,7 +7,7 @@ import java.util.Set;
 
 @Data
 @Builder()
-public class MovieShortResponseDto {
+public class MovieResponseDto {
     private String Title;
     private String year;
     private String genre;
@@ -17,5 +17,9 @@ public class MovieShortResponseDto {
     private String country;
     private Set<RatingDto> ratings;
     private String type;
+    private String runtime;
     private String plot;
+    private String rated;
+    private String writer;
+    private String poster;
 }

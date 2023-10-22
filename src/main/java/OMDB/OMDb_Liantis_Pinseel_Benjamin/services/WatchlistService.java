@@ -2,7 +2,7 @@ package OMDB.OMDb_Liantis_Pinseel_Benjamin.services;
 
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.clients.Movie;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.clients.MovieClient;
-import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.MovieShortResponseDto;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.MovieResponseDto;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.WatchlistCreateDto;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.WatchlistResponseDto;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.WatchlistUpdateRequestDto;
@@ -46,7 +46,7 @@ public class WatchlistService {
         Optional<Watchlist> optionalWatchlist = Optional.ofNullable(watchlistRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Watchlist with this ID was not found.")));
         if (optionalWatchlist.isPresent()) {
             WatchlistResponseDto watchlistResponseDto = watchlistMapper.mapWatchlistToWatchlistResponseDto(optionalWatchlist.get());
-            Set<MovieShortResponseDto> movies = optionalWatchlist.get().getMovieIds().stream().map(movieId -> {
+            Set<MovieResponseDto> movies = optionalWatchlist.get().getMovieIds().stream().map(movieId -> {
                 Movie movie = movieClient.findById(decryptedApiKey, movieId);
                 return movieMapper.mapMovieToMovieShortResponseDto(movie);
             }).collect(Collectors.toSet());
@@ -82,7 +82,7 @@ public class WatchlistService {
         watchlist.getMovieIds().add(movieId);
         watchlistRepository.save(watchlist);
         WatchlistResponseDto responseDto = watchlistMapper.mapWatchlistToWatchlistResponseDto(watchlist);
-        Set<MovieShortResponseDto> movies = watchlist.getMovieIds().stream().map(id -> {
+        Set<MovieResponseDto> movies = watchlist.getMovieIds().stream().map(id -> {
             Movie movie = movieClient.findById(decryptedApiKey, id);
             return movieMapper.mapMovieToMovieShortResponseDto(movie);
         }).collect(Collectors.toSet());
@@ -96,7 +96,7 @@ public class WatchlistService {
         watchlist.getMovieIds().removeIf(id -> id.equals(movieId));
         watchlistRepository.save(watchlist);
         WatchlistResponseDto responseDto = watchlistMapper.mapWatchlistToWatchlistResponseDto(watchlist);
-        Set<MovieShortResponseDto> movies = watchlist.getMovieIds().stream().map(id -> {
+        Set<MovieResponseDto> movies = watchlist.getMovieIds().stream().map(id -> {
             Movie movie = movieClient.findById(decryptedApiKey, id);
             return movieMapper.mapMovieToMovieShortResponseDto(movie);
         }).collect(Collectors.toSet());
@@ -115,7 +115,7 @@ public class WatchlistService {
         };
         for (Watchlist watchlist : watchlists) {
             WatchlistResponseDto responseDto = watchlistMapper.mapWatchlistToWatchlistResponseDto(watchlist);
-            Set<MovieShortResponseDto> movies = watchlist.getMovieIds().stream().map(movieId -> {
+            Set<MovieResponseDto> movies = watchlist.getMovieIds().stream().map(movieId -> {
                 Movie movie = movieClient.findById(decryptedApiKey, movieId);
                 return movieMapper.mapMovieToMovieShortResponseDto(movie);
             }).collect(Collectors.toSet());

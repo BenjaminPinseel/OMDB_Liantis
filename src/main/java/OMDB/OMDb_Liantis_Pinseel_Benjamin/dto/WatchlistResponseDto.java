@@ -11,6 +11,6 @@ public class WatchlistResponseDto {
     private String title;
     private String description;
     private String userId;
-    private Set<MovieShortResponseDto> movies;
+    private Set<MovieResponseDto> movies;
 
 }
