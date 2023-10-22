@@ -4,6 +4,7 @@ import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.WatchlistCreateDto;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.WatchlistResponseDto;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.entities.Watchlist;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -32,18 +32,6 @@ public class MovieService {
         decryptedApiKey = EncryptionUtils.decrypt(encryptedApiKey);
     }
 
-//    public Optional<MovieDto> findByFilters(OmdbFilters filters) {
-//        if (decryptedApiKey == null) {
-//            throw new NullPointerException("API key was not found");
-//        }
-//        if (filters.getImdbId() == null && filters.getTitle() == null) {
-//            throw new IllegalArgumentException("At least one of 'i' or 't' must be provided.");
-//        }
-//        return movieClient.findByFilters(decryptedApiKey, filters.getImdbId(), filters.getTitle(), filters.getType(), filters.getYear(),
-//                filters.getPlot(), filters.getReturnType(), filters.getSearchTerm(), filters.getPage(),
-//                filters.getCallback(), filters.getVersion());
-//    }
-
     public MovieResponseDto findById(String id, String type, int year, String plot, String returnType) {
         if (decryptedApiKey == null) {
             throw new NullPointerException("API key was not found");

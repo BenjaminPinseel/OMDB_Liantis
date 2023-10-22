@@ -38,6 +38,6 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @NotNull
-    private String ID;
+    private String id;
 
 }

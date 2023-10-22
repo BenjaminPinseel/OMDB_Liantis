@@ -13,8 +13,6 @@ import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
-@RequiredArgsConstructor
 public class MovieMapperTests {
 
     private final MovieMapper movieMapper = new MovieMapper();

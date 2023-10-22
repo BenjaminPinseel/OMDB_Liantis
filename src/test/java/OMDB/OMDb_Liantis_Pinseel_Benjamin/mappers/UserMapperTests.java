@@ -13,8 +13,6 @@ import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
-@RequiredArgsConstructor
 class UserMapperTests {
 
     private final UserMapper userMapper = new UserMapper();

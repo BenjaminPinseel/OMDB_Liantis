@@ -29,6 +29,7 @@ public class Watchlist {
     @ElementCollection(targetClass = String.class)
     @CollectionTable(name = "watchlist_movie", joinColumns = @JoinColumn(name = "watchlist_id"))
     @Column(name = "movie_id")
+    @Setter
     private Set<String> movieIds;
 
     @Setter

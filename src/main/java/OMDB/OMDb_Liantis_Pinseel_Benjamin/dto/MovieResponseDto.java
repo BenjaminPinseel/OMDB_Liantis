@@ -2,11 +2,13 @@ package OMDB.OMDb_Liantis_Pinseel_Benjamin.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
 @Data
 @Builder()
+@NoArgsConstructor
 public class MovieResponseDto {
     private String Title;
     private String year;
