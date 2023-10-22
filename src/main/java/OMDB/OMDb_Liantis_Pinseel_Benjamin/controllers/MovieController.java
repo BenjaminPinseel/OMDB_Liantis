@@ -1,6 +1,7 @@
 package OMDB.OMDb_Liantis_Pinseel_Benjamin.controllers;
 
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.MovieResponseDto;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.PageDto;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.services.MovieService;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
@@ -41,7 +42,7 @@ public class MovieController {
     }
 
     @GetMapping("/")
-    public Set<MovieResponseDto> findAll(
+    public PageDto<MovieResponseDto> findAll(
             @RequestParam() final String title,
             @RequestParam(required = false) final String type,
             @RequestParam(required = false) final int year,

@@ -4,6 +4,7 @@ import OMDB.OMDb_Liantis_Pinseel_Benjamin.clients.Movie;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.clients.MovieClient;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.MovieListDto;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.MovieResponseDto;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.PageDto;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.helpers.EncryptionUtils;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.mappers.MovieMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -105,9 +106,9 @@ public class MovieServiceTest {
         when(movieClient.findAll(anyString(), anyString(), anyString(), anyInt(), anyInt())).thenReturn(movieListDto);
 
         // Act
-        Set<MovieResponseDto> result = movieService.findAll(title, type, year, page);
+        PageDto<MovieResponseDto> result = movieService.findAll(title, type, year, page);
 
         // Assert
-        assertEquals(HashSet.class, result.getClass());
+        assertEquals(HashSet.class, result.getResponseDtos().getClass());
     }
 }

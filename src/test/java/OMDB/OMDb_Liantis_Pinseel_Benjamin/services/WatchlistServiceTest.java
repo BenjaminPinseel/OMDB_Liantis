@@ -27,22 +27,22 @@ import static org.mockito.Mockito.*;
 public class WatchlistServiceTest {
 
     @Mock
-    private WatchlistRepository watchlistRepository;
+    WatchlistRepository watchlistRepository;
 
     @Mock
-    private WatchlistMapper watchlistMapper;
+    WatchlistMapper watchlistMapper;
 
     @Mock
-    private MovieMapper movieMapper;
+    MovieMapper movieMapper;
 
     @Mock
-    private MovieClient movieClient;
+    MovieClient movieClient;
 
     @Mock
-    private EncryptionUtils encryptionUtils;
+    EncryptionUtils encryptionUtils;
 
     @InjectMocks
-    private WatchlistService watchlistService;
+    WatchlistService watchlistService;
 
     // Test for finding an existing watchlist by ID
     @Test

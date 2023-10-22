@@ -1,0 +1,111 @@
+package OMDB.OMDb_Liantis_Pinseel_Benjamin.controllers;
+
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.PageDto;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.UserCreateDto;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.UserResponseDto;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.UserUpdateRequestDto;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.entities.User;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.exceptions.ResourceNotFoundException;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.mappers.UserMapper;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.services.UserService;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+class UserControllerTest {
+
+    @Mock
+    UserService userService;
+
+    @Mock
+    UserMapper userMapper;
+
+    @InjectMocks
+    UserController userController;
+
+    // Test for finding all users
+    @Test
+    void findAllTest() {
+        // Arrange
+        PageDto<UserResponseDto> pageDto = new PageDto<UserResponseDto>();
+        when(userService.findAll(anyInt(), anyInt())).thenReturn(Page.empty());
+        when(userMapper.mapToPageDto(any())).thenReturn(pageDto);
+
+        // Act
+        PageDto<UserResponseDto> result = userController.findAll(0, 10);
+
+        // Assert
+        verify(userService, times(1)).findAll(0, 10);
+        verify(userMapper, times(1)).mapToPageDto(any());
+        assertEquals(pageDto, result);
+    }
+
+    // Test for finding a user by ID
+    @Test
+    void findByIdTest() {
+        // Arrange
+        UserResponseDto userResponseDto = new UserResponseDto();
+        when(userService.findById(anyString())).thenReturn(Optional.of(new User()));
+        when(userMapper.mapUserToUserResponseDto(any())).thenReturn(userResponseDto);
+
+        // Act
+        UserResponseDto result = userController.findById("1");
+
+        // Assert
+        verify(userService, times(1)).findById("1");
+        verify(userMapper, times(1)).mapUserToUserResponseDto(any());
+        assertEquals(userResponseDto, result);
+    }
+
+    // Test for saving a user
+    @Test
+    void postTest() {
+        // Arrange
+        UserCreateDto userCreateDto = new UserCreateDto();
+
+        // Act
+        userController.post(userCreateDto);
+
+        // Assert
+        verify(userService, times(1)).save(any());
+    }
+
+    // Test for updating a user
+    @Test
+    void putTest() {
+        // Arrange
+        UserResponseDto userResponseDto = new UserResponseDto();
+        UserUpdateRequestDto userUpdateRequestDto = new UserUpdateRequestDto();
+        when(userService.update(anyString(), any())).thenReturn(new User());
+        when(userMapper.mapUserToUserResponseDto(any())).thenReturn(userResponseDto);
+
+        // Act
+        UserResponseDto result = userController.put("1", userUpdateRequestDto);
+
+        // Assert
+        verify(userService, times(1)).update("1", userUpdateRequestDto);
+        verify(userMapper, times(1)).mapUserToUserResponseDto(any());
+        assertEquals(userResponseDto, result);
+    }
+
+    // Test for deleting a user by ID
+    @Test
+    void deleteTest() {
+        // Act
+        userController.delete("1");
+
+        // Assert
+        verify(userService, times(1)).deleteById("1");
+    }
+}

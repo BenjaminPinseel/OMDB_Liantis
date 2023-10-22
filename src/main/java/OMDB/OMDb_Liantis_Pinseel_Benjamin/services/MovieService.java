@@ -4,13 +4,22 @@ import OMDB.OMDb_Liantis_Pinseel_Benjamin.clients.Movie;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.clients.MovieClient;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.MovieResponseDto;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.MovieListDto;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.PageDto;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.helpers.EncryptionUtils;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.mappers.MovieMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.PageFormat;
+import java.awt.print.Pageable;
+import java.awt.print.Printable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -75,14 +84,18 @@ public class MovieService {
      * @return Set of MovieResponseDto containing details of the movies.
      * @throws NullPointerException if the API key is not found.
      */
-    public Set<MovieResponseDto> findAll(String title, String type, int year, int page) {
+    public PageDto<MovieResponseDto> findAll(String title, String type, int year, int page) {
         if (decryptedApiKey() == null) {
             throw new NullPointerException("API key was not found");
         }
         MovieListDto movieListDto = movieClient.findAll(decryptedApiKey(), title, type, year, page);
-        Set<MovieResponseDto> responseDtos = movieListDto.getSearch().stream().map(movie -> {
-            return movieMapper.mapMovieToMovieShortResponseDto(movie);
-        }).collect(Collectors.toSet());
-        return responseDtos;
+        Set<MovieResponseDto> responseDtos = movieListDto.getSearch().stream()
+                .map(movie -> movieMapper.mapMovieToMovieShortResponseDto(movie))
+                .collect(Collectors.toSet());
+        return new PageDto<MovieResponseDto>(
+                movieListDto.getTotalResults()/10,
+                movieListDto.getTotalResults(),
+                responseDtos
+        );
     }
 }
