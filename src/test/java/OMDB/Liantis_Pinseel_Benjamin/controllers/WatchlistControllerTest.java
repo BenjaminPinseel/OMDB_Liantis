@@ -102,13 +102,13 @@ class WatchlistControllerTest {
     }
 
     @Test
-    void testPost() {
+    void testcreate() {
         // Arrange
         WatchlistCreateDto watchlistCreateDto = new WatchlistCreateDto();
         String userId = "user1";
 
         // Act
-        watchlistController.post(watchlistCreateDto, userId);
+        watchlistController.create(watchlistCreateDto, userId);
 
         // Assert
         verify(watchlistService, times(1)).save(watchlistCreateDto, userId);

@@ -33,10 +33,10 @@ public class WatchlistServiceTest {
     WatchlistMapper watchlistMapper;
 
     @Mock
-    MovieMapper movieMapper;
+    MovieClient movieClient;
 
     @Mock
-    MovieClient movieClient;
+    MovieMapper movieMapper;
 
     @Mock
     EncryptionUtils encryptionUtils;

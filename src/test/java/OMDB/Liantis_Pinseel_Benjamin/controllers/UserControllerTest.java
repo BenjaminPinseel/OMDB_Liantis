@@ -68,12 +68,13 @@ class UserControllerTest {
 
     // Test for saving a user
     @Test
-    void postTest() {
+    void createTest() {
         // Arrange
+        String userId = "user1";
         UserCreateDto userCreateDto = new UserCreateDto();
 
         // Act
-        userController.post(userCreateDto);
+        userController.create(userCreateDto);
 
         // Assert
         verify(userService, times(1)).save(any());
@@ -81,7 +82,7 @@ class UserControllerTest {
 
     // Test for updating a user
     @Test
-    void putTest() {
+    void updateTest() {
         // Arrange
         UserResponseDto userResponseDto = new UserResponseDto();
         UserUpdateRequestDto userUpdateRequestDto = new UserUpdateRequestDto();
@@ -89,7 +90,7 @@ class UserControllerTest {
         when(userMapper.mapUserToUserResponseDto(any())).thenReturn(userResponseDto);
 
         // Act
-        UserResponseDto result = userController.put("1", userUpdateRequestDto);
+        UserResponseDto result = userController.update("1", userUpdateRequestDto);
 
         // Assert
         verify(userService, times(1)).update("1", userUpdateRequestDto);

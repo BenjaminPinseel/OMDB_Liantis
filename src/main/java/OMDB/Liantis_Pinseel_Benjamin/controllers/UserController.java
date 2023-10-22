@@ -43,12 +43,12 @@ public class UserController {
 
     @PostMapping()
     @ResponseStatus(value = HttpStatus.CREATED)
-    public void post(@RequestBody @Valid UserCreateDto newUser) {
+    public void create(@RequestBody @Valid UserCreateDto newUser) {
         this.userService.save(newUser);
     }
 
     @PutMapping()
-    public UserResponseDto put(@PathVariable String id, @RequestBody @Valid UserUpdateRequestDto userUpdateRequestDto) {
+    public UserResponseDto update(@PathVariable String id, @RequestBody @Valid UserUpdateRequestDto userUpdateRequestDto) {
         User updatedUser = this.userService.update(id, userUpdateRequestDto);
 
         return mapper.mapUserToUserResponseDto(updatedUser);

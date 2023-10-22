@@ -40,7 +40,7 @@ public class WatchlistController {
 
     @PostMapping()
     @ResponseStatus(value = HttpStatus.CREATED)
-    public void post(@RequestBody @Valid WatchlistCreateDto watchlistCreateDto, @RequestHeader String userId) {
+    public void create(@RequestBody @Valid WatchlistCreateDto watchlistCreateDto, @RequestHeader String userId) {
         watchlistService.save(watchlistCreateDto, userId);
     }
 
