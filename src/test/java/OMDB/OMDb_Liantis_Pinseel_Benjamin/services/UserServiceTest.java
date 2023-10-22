@@ -25,13 +25,13 @@ import static org.mockito.Mockito.*;
 class UserServiceTest {
 
     @Mock
-    private UserRepository userRepository;
+    UserRepository userRepository;
 
     @Mock
-    private UserMapper userMapper;
+    UserMapper userMapper;
 
     @InjectMocks
-    private UserService userService;
+    UserService userService;
 
     // Test for finding all users
     @Test

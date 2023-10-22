@@ -28,19 +28,19 @@ import static org.mockito.Mockito.when;
 public class MovieServiceTest {
 
     @Mock
-    private EncryptionUtils encryptionUtils;
+    EncryptionUtils encryptionUtils;
 
     @Mock
-    private MovieClient movieClient;
+    MovieClient movieClient;
 
     @Mock
-    private MovieMapper movieMapper;
+    MovieMapper movieMapper;
 
     @InjectMocks
-    private MovieService movieService;
+    MovieService movieService;
 
     @Value("${encrypted.api.key}")
-    private String encryptedApiKey;
+    String encryptedApiKey;
 
 
     // Test for finding a movie by ID
@@ -56,7 +56,7 @@ public class MovieServiceTest {
         Movie movie = Movie.builder()
                 .imdbID("123")
                 .build();
-        when(encryptionUtils.decrypt(anyString())).thenReturn("1");
+        when(encryptionUtils.decrypt(any())).thenReturn("1");
         when(movieClient.findById(anyString(), anyString(), anyString(), anyInt(), anyString(), anyString())).thenReturn(movie);
         when(movieMapper.mapMovieToDetailedMovieResponseDto(movie)).thenReturn(new MovieResponseDto());
 
@@ -80,7 +80,7 @@ public class MovieServiceTest {
         Movie movie = Movie.builder()
                 .title("Shrek")
                 .build();
-        when(encryptionUtils.decrypt(eq(""))).thenReturn("1");
+        when(encryptionUtils.decrypt(any())).thenReturn("1");
         when(movieClient.findByTitle(anyString(), anyString(), anyString(), anyInt(), anyString(), anyString())).thenReturn(movie);
         when(movieMapper.mapMovieToDetailedMovieResponseDto(movie)).thenReturn(new MovieResponseDto());
 
@@ -101,9 +101,8 @@ public class MovieServiceTest {
 
         MovieListDto movieListDto = new MovieListDto();
         movieListDto.setSearch(new ArrayList<>());
-        when(encryptionUtils.decrypt(anyString())).thenReturn("1");
+        when(encryptionUtils.decrypt(any())).thenReturn("1");
         when(movieClient.findAll(anyString(), anyString(), anyString(), anyInt(), anyInt())).thenReturn(movieListDto);
-        when(movieMapper.mapMovieToMovieShortResponseDto(any())).thenReturn(new MovieResponseDto());
 
         // Act
         Set<MovieResponseDto> result = movieService.findAll(title, type, year, page);

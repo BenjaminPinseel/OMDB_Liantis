@@ -11,7 +11,6 @@ import OMDB.OMDb_Liantis_Pinseel_Benjamin.helpers.EncryptionUtils;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.mappers.MovieMapper;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.mappers.WatchlistMapper;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.repositories.WatchlistRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -48,9 +48,26 @@ public class WatchlistServiceTest {
     @Test
     public void testFindById_ExistingWatchlist_ReturnsWatchlistResponseDto() {
         // Arrange
-        Watchlist watchlist = new Watchlist();
+        Watchlist watchlist = Watchlist.builder()
+                .id("1")
+                .title("test title watchlist")
+                .description("test description")
+                .movieIds(Set.of("123"))
+                .build();
+        when(encryptionUtils.decrypt(any())).thenReturn("1");
         when(watchlistRepository.findById(anyString())).thenReturn(Optional.of(watchlist));
-        when(movieClient.findById(anyString(), anyString())).thenReturn(new Movie());
+        when(movieClient.findById(anyString(), anyString())).thenReturn(Movie.builder()
+                .title("test title")
+                .type("movie")
+                .plot("test plot")
+                .actors("henk")
+                .country("USA")
+                .language("English")
+                .poster("")
+                .year("2001")
+                .imdbID("123")
+                .build()
+        );
         when(watchlistMapper.mapWatchlistToWatchlistResponseDto(any(Watchlist.class))).thenReturn(new WatchlistResponseDto());
 
         // Act
@@ -68,8 +85,9 @@ public class WatchlistServiceTest {
         // Arrange
         when(watchlistRepository.findById(anyString())).thenReturn(Optional.empty());
 
-        // Act
-        watchlistService.findById("id");
+        // Act and Assert
+        assertThrows(ResourceNotFoundException.class, () -> watchlistService.findById("id"));
+
 
     }
 
@@ -112,8 +130,15 @@ public class WatchlistServiceTest {
         // Arrange
         String watchlistId = "watchlistId";
         String movieId = "movieId";
-        Watchlist watchlist = new Watchlist();
-        watchlist.setMovieIds(new HashSet<>());
+        HashSet<String> movieIds = new HashSet<>();
+        movieIds.add("1");
+        Watchlist watchlist = Watchlist.builder()
+                .id("1")
+                .title("title 1")
+                .description("description 1")
+                .movieIds(movieIds)
+                .build();
+        when(encryptionUtils.decrypt(any())).thenReturn("1");
         when(watchlistRepository.findById(anyString())).thenReturn(Optional.of(watchlist));
         when(watchlistMapper.mapWatchlistToWatchlistResponseDto(any(Watchlist.class))).thenReturn(new WatchlistResponseDto());
         when(movieClient.findById(anyString(), anyString())).thenReturn(new Movie());
@@ -134,10 +159,15 @@ public class WatchlistServiceTest {
         // Arrange
         String watchlistId = "watchlistId";
         String movieId = "movieId";
-        Watchlist watchlist = new Watchlist();
-        Set<String> movieIds = new HashSet<>();
-        movieIds.add(movieId);
-        watchlist.setMovieIds(movieIds);
+        HashSet<String> movieIds = new HashSet<>();
+        movieIds.add("1");
+        Watchlist watchlist = Watchlist.builder()
+                .id("1")
+                .title("title 1")
+                .description("description 1")
+                .movieIds(movieIds)
+                .build();
+        when(encryptionUtils.decrypt(any())).thenReturn("1");
         when(watchlistRepository.findById(anyString())).thenReturn(Optional.of(watchlist));
         when(watchlistMapper.mapWatchlistToWatchlistResponseDto(any(Watchlist.class))).thenReturn(new WatchlistResponseDto());
         when(movieClient.findById(anyString(), anyString())).thenReturn(new Movie());
@@ -171,9 +201,23 @@ public class WatchlistServiceTest {
         // Arrange
         String id = "id";
         List<Watchlist> watchlists = new ArrayList<>();
-        watchlists.add(new Watchlist());
+        watchlists.add(Watchlist.builder()
+                .userId("1")
+                .title("title 1")
+                .description("description 1")
+                .movieIds(Set.of("1"))
+                .build()
+        );
+        watchlists.add(Watchlist.builder()
+                .userId("1")
+                .title("title 2")
+                .description("description 2")
+                .movieIds(Set.of("2"))
+                .build()
+        );
+        when(encryptionUtils.decrypt(any())).thenReturn("1");
         when(watchlistRepository.findByUserId(anyString())).thenReturn(watchlists);
-        when(watchlistMapper.mapWatchlistToWatchlistResponseDto(any(Watchlist.class))).thenReturn(new WatchlistResponseDto());
+       when(watchlistMapper.mapWatchlistToWatchlistResponseDto(any(Watchlist.class))).thenReturn(new WatchlistResponseDto());
         when(movieClient.findById(anyString(), anyString())).thenReturn(new Movie());
 
         // Act
