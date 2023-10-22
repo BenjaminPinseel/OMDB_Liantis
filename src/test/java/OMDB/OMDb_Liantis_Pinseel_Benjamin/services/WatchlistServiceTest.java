@@ -1,26 +1,27 @@
 package OMDB.OMDb_Liantis_Pinseel_Benjamin.services;
-        import static org.mockito.Mockito.*;
-        import static org.junit.Assert.assertEquals;
 
-        import java.util.*;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.clients.Movie;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.clients.MovieClient;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.WatchlistCreateDto;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.WatchlistResponseDto;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.WatchlistUpdateRequestDto;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.entities.Watchlist;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.exceptions.ResourceNotFoundException;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.helpers.EncryptionUtils;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.mappers.MovieMapper;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.mappers.WatchlistMapper;
+import OMDB.OMDb_Liantis_Pinseel_Benjamin.repositories.WatchlistRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-        import OMDB.OMDb_Liantis_Pinseel_Benjamin.clients.Movie;
-        import OMDB.OMDb_Liantis_Pinseel_Benjamin.clients.MovieClient;
-        import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.WatchlistCreateDto;
-        import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.WatchlistResponseDto;
-        import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.WatchlistUpdateRequestDto;
-        import OMDB.OMDb_Liantis_Pinseel_Benjamin.entities.Watchlist;
-        import OMDB.OMDb_Liantis_Pinseel_Benjamin.exceptions.ResourceNotFoundException;
-        import OMDB.OMDb_Liantis_Pinseel_Benjamin.helpers.EncryptionUtils;
-        import OMDB.OMDb_Liantis_Pinseel_Benjamin.mappers.MovieMapper;
-        import OMDB.OMDb_Liantis_Pinseel_Benjamin.mappers.WatchlistMapper;
-        import OMDB.OMDb_Liantis_Pinseel_Benjamin.repositories.WatchlistRepository;
-        import org.junit.Before;
-        import org.junit.Test;
-        import org.junit.jupiter.api.extension.ExtendWith;
-        import org.mockito.InjectMocks;
-        import org.mockito.Mock;
-        import org.mockito.junit.jupiter.MockitoExtension;
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class WatchlistServiceTest {
@@ -43,11 +44,6 @@ public class WatchlistServiceTest {
     @InjectMocks
     private WatchlistService watchlistService;
 
-    @Before
-    public void setUp() {
-        when(encryptionUtils.decrypt(anyString())).thenReturn("decryptedApiKey");
-    }
-
     // Test for finding an existing watchlist by ID
     @Test
     public void testFindById_ExistingWatchlist_ReturnsWatchlistResponseDto() {
@@ -67,7 +63,7 @@ public class WatchlistServiceTest {
     }
 
     // Test for finding a non-existing watchlist by ID
-    @Test(expected = ResourceNotFoundException.class)
+    @Test
     public void testFindById_NonExistingWatchlist_ThrowsResourceNotFoundException() {
         // Arrange
         when(watchlistRepository.findById(anyString())).thenReturn(Optional.empty());

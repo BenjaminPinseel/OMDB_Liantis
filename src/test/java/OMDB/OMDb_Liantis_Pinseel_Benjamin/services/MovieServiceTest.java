@@ -8,9 +8,12 @@ import OMDB.OMDb_Liantis_Pinseel_Benjamin.helpers.EncryptionUtils;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.mappers.MovieMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.platform.commons.util.StringUtils;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.ArrayList;
@@ -21,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 public class MovieServiceTest {
 
     @Mock
@@ -38,10 +42,6 @@ public class MovieServiceTest {
     @Value("${encrypted.api.key}")
     private String encryptedApiKey;
 
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     // Test for finding a movie by ID
     @Test
@@ -56,6 +56,7 @@ public class MovieServiceTest {
         Movie movie = Movie.builder()
                 .imdbID("123")
                 .build();
+        when(encryptionUtils.decrypt(anyString())).thenReturn("1");
         when(movieClient.findById(anyString(), anyString(), anyString(), anyInt(), anyString(), anyString())).thenReturn(movie);
         when(movieMapper.mapMovieToDetailedMovieResponseDto(movie)).thenReturn(new MovieResponseDto());
 
@@ -79,6 +80,7 @@ public class MovieServiceTest {
         Movie movie = Movie.builder()
                 .title("Shrek")
                 .build();
+        when(encryptionUtils.decrypt(eq(""))).thenReturn("1");
         when(movieClient.findByTitle(anyString(), anyString(), anyString(), anyInt(), anyString(), anyString())).thenReturn(movie);
         when(movieMapper.mapMovieToDetailedMovieResponseDto(movie)).thenReturn(new MovieResponseDto());
 
@@ -99,6 +101,7 @@ public class MovieServiceTest {
 
         MovieListDto movieListDto = new MovieListDto();
         movieListDto.setSearch(new ArrayList<>());
+        when(encryptionUtils.decrypt(anyString())).thenReturn("1");
         when(movieClient.findAll(anyString(), anyString(), anyString(), anyInt(), anyInt())).thenReturn(movieListDto);
         when(movieMapper.mapMovieToMovieShortResponseDto(any())).thenReturn(new MovieResponseDto());
 

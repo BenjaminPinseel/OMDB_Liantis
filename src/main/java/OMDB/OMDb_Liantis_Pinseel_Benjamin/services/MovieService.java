@@ -25,34 +25,61 @@ public class MovieService {
     @Value("${encrypted.api.key}")
     private String encryptedApiKey;
 
-    private String decryptedApiKey;
 
-    @PostConstruct
-    public void init() {
-        decryptedApiKey = EncryptionUtils.decrypt(encryptedApiKey);
+    public String decryptedApiKey() {
+        return encryptionUtils.decrypt(encryptedApiKey); // Decrypting the API key.
     }
 
+    /**
+     * Fetches a movie by its ID.
+     * @param id The ID of the movie to be retrieved.
+     * @param type The type of the movie (optional).
+     * @param year The release year of the movie (optional).
+     * @param plot The plot type of the movie (optional).
+     * @param returnType The type of data to be returned (optional).
+     * @return MovieResponseDto containing the details of the movie.
+     * @throws NullPointerException if the API key is not found.
+     */
     public MovieResponseDto findById(String id, String type, int year, String plot, String returnType) {
-        if (decryptedApiKey == null) {
+        if (decryptedApiKey() == null) {
             throw new NullPointerException("API key was not found");
         }
-        Movie movie = movieClient.findById(decryptedApiKey, id, type, year, plot, returnType);
+        Movie movie = movieClient.findById(decryptedApiKey(), id, type, year, plot, returnType);
         return movieMapper.mapMovieToDetailedMovieResponseDto(movie);
     }
 
+    /**
+     * Searches for a movie by its title.
+     * @param title The title of the movie to be searched.
+     * @param type The type of the movie (optional).
+     * @param year The release year of the movie (optional).
+     * @param plot The plot type of the movie (optional).
+     * @param returnType The type of data to be returned (optional).
+     * @return MovieResponseDto containing the details of the movie.
+     * @throws NullPointerException if the API key is not found.
+     */
     public MovieResponseDto findByTitle(String title, String type, int year, String plot, String returnType) {
-        if (decryptedApiKey == null) {
+        if (decryptedApiKey() == null) {
             throw new NullPointerException("API key was not found");
         }
-        Movie movie = movieClient.findByTitle(decryptedApiKey, title, type, year, plot, returnType);
+        Movie movie = movieClient.findByTitle(decryptedApiKey(), title, type, year, plot, returnType);
         return movieMapper.mapMovieToDetailedMovieResponseDto(movie);
     }
 
+    /**
+     * Retrieves all movies with the specified parameters.
+     * @param title The title of the movies to be searched.
+     * @param type The type of the movies (optional).
+     * @param year The release year of the movies (optional).
+     * @param page The page number for pagination.
+     * @return Set of MovieResponseDto containing details of the movies.
+     * @throws NullPointerException if the API key is not found.
+     */
     public Set<MovieResponseDto> findAll(String title, String type, int year, int page) {
-        if (decryptedApiKey == null) {
+        if (decryptedApiKey() == null) {
             throw new NullPointerException("API key was not found");
         }
-        MovieListDto movieListDto = movieClient.findAll(decryptedApiKey, title, type, year, page);
+        MovieListDto movieListDto = movieClient.findAll(decryptedApiKey(), title, type, year, page);
         Set<MovieResponseDto> responseDtos = movieListDto.getSearch().stream().map(movie -> {
             return movieMapper.mapMovieToMovieShortResponseDto(movie);
         }).collect(Collectors.toSet());
