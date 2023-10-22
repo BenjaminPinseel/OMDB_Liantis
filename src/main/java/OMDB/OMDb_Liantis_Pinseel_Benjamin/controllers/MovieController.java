@@ -2,6 +2,7 @@ package OMDB.OMDb_Liantis_Pinseel_Benjamin.controllers;
 
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.MovieResponseDto;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.services.MovieService;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import java.util.Set;
 @RequestMapping(value = "/movie")
 @RequiredArgsConstructor
 @Validated
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MovieController {
     private final MovieService movieService;
 

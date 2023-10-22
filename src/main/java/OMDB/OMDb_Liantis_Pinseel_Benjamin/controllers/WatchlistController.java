@@ -6,6 +6,7 @@ import OMDB.OMDb_Liantis_Pinseel_Benjamin.dto.WatchlistUpdateRequestDto;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.entities.Watchlist;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.mappers.WatchlistMapper;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.services.WatchlistService;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.List;
 @RequestMapping(value = "/watchlist")
 @RequiredArgsConstructor
 @Validated
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class WatchlistController {
 
     private final WatchlistService watchlistService;

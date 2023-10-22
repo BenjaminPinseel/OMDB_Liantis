@@ -9,6 +9,7 @@ import OMDB.OMDb_Liantis_Pinseel_Benjamin.exceptions.ResourceNotFoundException;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.helpers.EncryptionUtils;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.mappers.UserMapper;
 import OMDB.OMDb_Liantis_Pinseel_Benjamin.services.UserService;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/user")
 @RequiredArgsConstructor
 @Validated
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserController {
     private final UserService userService;
     private final UserMapper mapper;
