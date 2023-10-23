@@ -47,14 +47,14 @@ public class UserController {
         this.userService.save(newUser);
     }
 
-    @PutMapping()
+    @PutMapping("/{id}")
     public UserResponseDto update(@PathVariable String id, @RequestBody @Valid UserUpdateRequestDto userUpdateRequestDto) {
         User updatedUser = this.userService.update(id, userUpdateRequestDto);
 
         return mapper.mapUserToUserResponseDto(updatedUser);
     }
 
-    @DeleteMapping()
+    @DeleteMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable String id) {
         userService.deleteById(id);
