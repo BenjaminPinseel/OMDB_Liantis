@@ -1,12 +1,12 @@
 package OMDB.Liantis_Pinseel_Benjamin.dto;
 
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
 @Data
-@NoArgsConstructor
+@Builder
 public class PageDto<T> {
     private int totalPages;
     private long totalElements;

@@ -46,21 +46,33 @@ public class MovieServiceTest {
     @Test
     void findByIdTest() {
         // Arrange
-        String id = "123";
-        String type = "movie";
-        int year = 2021;
-        String plot = "full";
-        String returnType = "json";
-
         Movie movie = Movie.builder()
+                .title("test title")
+                .type("movie")
+                .plot("test plot")
+                .actors("henk")
+                .country("USA")
+                .language("English")
+                .poster("")
+                .year("2001")
                 .imdbID("123")
+                .build();
+        MovieResponseDto movieResponseDto = MovieResponseDto.builder()
+                .title(movie.getTitle())
+                .type(movie.getType())
+                .plot(movie.getPlot())
+                .actors(movie.getActors())
+                .country(movie.getCountry())
+                .language(movie.getLanguage())
+                .poster(movie.getPoster())
+                .year(movie.getYear())
                 .build();
         when(encryptionUtils.decrypt(any())).thenReturn("1");
         when(movieClient.findById(anyString(), anyString(), anyString(), anyInt(), anyString(), anyString())).thenReturn(movie);
-        when(movieMapper.mapMovieToDetailedMovieResponseDto(movie)).thenReturn(new MovieResponseDto());
+        when(movieMapper.mapMovieToDetailedMovieResponseDto(movie)).thenReturn(movieResponseDto);
 
         // Act
-        MovieResponseDto result = movieService.findById(id, type, year, plot, returnType);
+        MovieResponseDto result = movieService.findById(movie.getImdbID(), movie.getType(), Integer.parseInt(movie.getYear()), "short", "json");
 
         // Assert
         assertEquals(MovieResponseDto.class, result.getClass());
@@ -143,20 +155,22 @@ public class MovieServiceTest {
     // Test for finding all movies
     @Test
     void findAllTest() {
-        Movie movie = new Movie();
-        movie.setTitle("Inception");
-        movie.setYear("2021");
-        movie.setRated("PG-13");
-        movie.setRuntime("2h 28min");
-        movie.setGenre("Action, Adventure, Sci-Fi");
-        movie.setDirector("Christopher Nolan");
-        movie.setWriter("Christopher Nolan");
-        movie.setActors("Leonardo DiCaprio, Joseph Gordon-Levitt, Elliot Page");
-        movie.setPlot("A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O., but his tragic past may doom the project and his team to disaster.");
-        movie.setLanguage("English");
-        movie.setCountry("USA");
-        movie.setPoster("https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg");
-        movie.setType("movie");
+        Movie movie = Movie.builder()
+                .title("Inception")
+                .year("2021")
+                .rated("PG-13")
+                .runtime("2h 28min")
+                .genre("Action, Adventure, Sci-Fi")
+                .director("Christopher Nolan")
+                .writer("Christopher Nolan")
+                .actors("Leonardo DiCaprio, Joseph Gordon-Levitt, Elliot Page")
+                .plot("A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O., but his tragic past may doom the project and his team to disaster.")
+                .language("English")
+                .country("USA")
+                .poster("https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg")
+                .type("movie")
+                .build();
+
 
         List<Movie> search = new ArrayList<>();
         search.add(movie);

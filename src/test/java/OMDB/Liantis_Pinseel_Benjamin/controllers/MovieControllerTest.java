@@ -1,5 +1,6 @@
 package OMDB.Liantis_Pinseel_Benjamin.controllers;
 
+import OMDB.Liantis_Pinseel_Benjamin.clients.Movie;
 import OMDB.Liantis_Pinseel_Benjamin.dto.MovieResponseDto;
 import OMDB.Liantis_Pinseel_Benjamin.dto.PageDto;
 import OMDB.Liantis_Pinseel_Benjamin.services.MovieService;
@@ -29,17 +30,31 @@ class MovieControllerTest {
     @Test
     void findByIdTest() {
         // Arrange
-        String id = "123";
-        String type = "movie";
-        int year = 2021;
-        String plot = "full";
-        String returnType = "json";
-
-        MovieResponseDto movieResponseDto = new MovieResponseDto();
-        when(movieService.findById(anyString(), anyString(), anyInt(), anyString(), anyString())).thenReturn(movieResponseDto);
+        Movie movie = Movie.builder()
+                .title("test title")
+                .type("movie")
+                .plot("test plot")
+                .actors("henk")
+                .country("USA")
+                .language("English")
+                .poster("")
+                .year("2001")
+                .imdbID("123")
+                .build();
+        MovieResponseDto movieResponseDto = MovieResponseDto.builder()
+                .title(movie.getTitle())
+                .type(movie.getType())
+                .plot(movie.getPlot())
+                .actors(movie.getActors())
+                .country(movie.getCountry())
+                .language(movie.getLanguage())
+                .poster(movie.getPoster())
+                .year(movie.getYear())
+                .build();
+        when(movieService.findById(movie.getImdbID(), movie.getType(), Integer.parseInt(movie.getYear()), "short","json")).thenReturn(movieResponseDto);
 
         // Act
-        MovieResponseDto result = movieController.findById(id, type, year, plot, returnType);
+        MovieResponseDto result = movieController.findById(movie.getImdbID(), movie.getType(), Integer.parseInt(movie.getYear()), "short","json");
 
         // Assert
         assertEquals(movieResponseDto, result);
@@ -49,17 +64,31 @@ class MovieControllerTest {
     @Test
     void findByTitleTest() {
         // Arrange
-        String title = "Test Title";
-        String type = "movie";
-        int year = 2021;
-        String plot = "full";
-        String returnType = "json";
-
-        MovieResponseDto movieResponseDto = new MovieResponseDto();
-        when(movieService.findByTitle(anyString(), anyString(), anyInt(), anyString(), anyString())).thenReturn(movieResponseDto);
+        Movie movie = Movie.builder()
+                .title("test title")
+                .type("movie")
+                .plot("test plot")
+                .actors("henk")
+                .country("USA")
+                .language("English")
+                .poster("")
+                .year("2001")
+                .imdbID("123")
+                .build();
+        MovieResponseDto movieResponseDto = MovieResponseDto.builder()
+                .title(movie.getTitle())
+                .type(movie.getType())
+                .plot(movie.getPlot())
+                .actors(movie.getActors())
+                .country(movie.getCountry())
+                .language(movie.getLanguage())
+                .poster(movie.getPoster())
+                .year(movie.getYear())
+                .build();
+        when(movieService.findByTitle(movie.getTitle(), movie.getType(), Integer.parseInt(movie.getYear()), "short","json")).thenReturn(movieResponseDto);
 
         // Act
-        MovieResponseDto result = movieController.findByTitle(title, type, year, plot, returnType);
+        MovieResponseDto result = movieController.findByTitle(movie.getTitle(), movie.getType(), Integer.parseInt(movie.getYear()), "short","json");
 
         // Assert
         assertEquals(movieResponseDto, result);

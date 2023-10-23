@@ -9,8 +9,6 @@ import java.util.Set;
 
 @Data
 @Builder()
-@NoArgsConstructor
-@AllArgsConstructor
 public class MovieResponseDto {
     private String title;
     private String year;

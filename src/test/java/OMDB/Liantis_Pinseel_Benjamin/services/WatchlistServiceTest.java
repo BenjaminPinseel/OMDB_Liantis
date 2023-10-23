@@ -6,6 +6,7 @@ import OMDB.Liantis_Pinseel_Benjamin.dto.MovieResponseDto;
 import OMDB.Liantis_Pinseel_Benjamin.dto.WatchlistCreateDto;
 import OMDB.Liantis_Pinseel_Benjamin.dto.WatchlistResponseDto;
 import OMDB.Liantis_Pinseel_Benjamin.dto.WatchlistUpdateRequestDto;
+import OMDB.Liantis_Pinseel_Benjamin.entities.User;
 import OMDB.Liantis_Pinseel_Benjamin.entities.Watchlist;
 import OMDB.Liantis_Pinseel_Benjamin.exceptions.ResourceNotFoundException;
 import OMDB.Liantis_Pinseel_Benjamin.helpers.EncryptionUtils;
@@ -51,14 +52,13 @@ public class WatchlistServiceTest {
     public void testFindById_ExistingWatchlist_ReturnsWatchlistResponseDto() {
         // Arrange
         Watchlist watchlist = Watchlist.builder()
-                .id("1")
+                .id("id")
                 .title("test title watchlist")
                 .description("test description")
                 .movieIds(Set.of("123"))
+                .userId("userid")
                 .build();
-        when(encryptionUtils.decrypt(any())).thenReturn("1");
-        when(watchlistRepository.findById(anyString())).thenReturn(Optional.of(watchlist));
-        when(movieClient.findById(anyString(), anyString())).thenReturn(Movie.builder()
+        Movie movie = Movie.builder()
                 .title("test title")
                 .type("movie")
                 .plot("test plot")
@@ -68,17 +68,39 @@ public class WatchlistServiceTest {
                 .poster("")
                 .year("2001")
                 .imdbID("123")
-                .build()
-        );
-        when(watchlistMapper.mapWatchlistToWatchlistResponseDto(any(Watchlist.class))).thenReturn(new WatchlistResponseDto());
+                .build();
+        MovieResponseDto movieResponseDto = MovieResponseDto.builder()
+                .title(movie.getTitle())
+                .type(movie.getType())
+                .plot(movie.getPlot())
+                .actors(movie.getActors())
+                .country(movie.getCountry())
+                .language(movie.getLanguage())
+                .poster(movie.getPoster())
+                .year(movie.getYear())
+                .build();
+        WatchlistResponseDto watchlistResponseDto = WatchlistResponseDto.builder()
+                .title(watchlist.getTitle())
+                .description(watchlist.getDescription())
+                .userId(watchlist.getUserId())
+                .movies(Set.of(movieResponseDto))
+                .build();
+        when(encryptionUtils.decrypt(any())).thenReturn("1");
+        when(watchlistRepository.findById(watchlist.getId())).thenReturn(Optional.of(watchlist));
+        when(movieClient.findById(anyString(), eq(movie.getImdbID()))).thenReturn(movie);
+        when(watchlistMapper.mapWatchlistToWatchlistResponseDto(any(Watchlist.class))).thenReturn(watchlistResponseDto);
 
         // Act
         WatchlistResponseDto result = watchlistService.findById("id");
 
         // Assert
         assertEquals(WatchlistResponseDto.class, result.getClass());
-        verify(watchlistRepository, times(1)).findById(anyString());
-        verify(watchlistMapper, times(1)).mapWatchlistToWatchlistResponseDto(any(Watchlist.class));
+        verify(watchlistRepository, times(1)).findById(eq(watchlist.getId()));
+        verify(watchlistMapper, times(1)).mapWatchlistToWatchlistResponseDto(eq(watchlist));
+        assertEquals(result.getTitle(), watchlistResponseDto.getTitle());
+        assertEquals(result.getDescription(), watchlistResponseDto.getDescription());
+        assertEquals(result.getUserId(), watchlistResponseDto.getUserId());
+        assertEquals(result.getMovies().size(), watchlistResponseDto.getMovies().size());
     }
 
     // Test for finding a non-existing watchlist by ID
@@ -102,57 +124,105 @@ public class WatchlistServiceTest {
                 .description("test description")
                 .build();
         String userId = "userId";
+        Watchlist watchlist = Watchlist.builder()
+                .title(watchlistCreateDto.getTitle())
+                .description(watchlistCreateDto.getDescription())
+                .userId(userId)
+                .build();
 
         // Act
         watchlistService.save(watchlistCreateDto, userId);
 
+
         // Assert
-        verify(watchlistRepository, times(1)).save(any(Watchlist.class));
+        ArgumentCaptor<Watchlist> watchlistArgumentCaptor = ArgumentCaptor.forClass(Watchlist.class);
+        verify(watchlistRepository, times(1)).save(watchlistArgumentCaptor.capture());
+        Watchlist capturedWatchlist = watchlistArgumentCaptor.getValue();
+        assertEquals(watchlistCreateDto.getTitle(), capturedWatchlist.getTitle());
+        assertEquals(watchlistCreateDto.getDescription(), capturedWatchlist.getDescription());
+        assertEquals(userId, capturedWatchlist.getUserId());
     }
 
     // Test for updating a watchlist
     @Test
     public void testUpdate() {
         // Arrange
-        WatchlistUpdateRequestDto watchlistUpdateRequestDto = new WatchlistUpdateRequestDto();
-        watchlistUpdateRequestDto.setId("id");
-        Watchlist originalWatchlist = new Watchlist();
-        when(watchlistRepository.findById(anyString())).thenReturn(Optional.of(originalWatchlist));
+        WatchlistUpdateRequestDto watchlistUpdateRequestDto = WatchlistUpdateRequestDto.builder()
+                .id("id")
+                .userId("user1")
+                .title("Watchlist Title 2")
+                .description("Watchlist Description 2")
+                .build();
+        Watchlist originalWatchlist = Watchlist.builder()
+                .id("id")
+                .userId("user1")
+                .title("Watchlist Title")
+                .description("Watchlist Description")
+                .movieIds(new HashSet<>(Arrays.asList("1", "2", "3")))
+                .build();
+
+        when(watchlistRepository.findById(watchlistUpdateRequestDto.getId())).thenReturn(Optional.of(originalWatchlist));
 
         // Act
         watchlistService.update(watchlistUpdateRequestDto);
 
         // Assert
-        verify(watchlistRepository, times(1)).findById(anyString());
+        verify(watchlistRepository, times(1)).findById(eq(originalWatchlist.getId()));
         verify(watchlistRepository, times(1)).save(any(Watchlist.class));
 
         ArgumentCaptor<Watchlist> watchlistArgumentCaptor = ArgumentCaptor.forClass(Watchlist.class);
         verify(watchlistRepository).save(watchlistArgumentCaptor.capture());
         Watchlist capturedWatchlist = watchlistArgumentCaptor.getValue();
         assertEquals(originalWatchlist.getId(), capturedWatchlist.getId());
+        assertEquals(watchlistUpdateRequestDto.getTitle(), capturedWatchlist.getTitle());
+        assertEquals(watchlistUpdateRequestDto.getDescription(), capturedWatchlist.getDescription());
     }
 
     // Test for adding a movie to a watchlist
     @Test
     public void testAddMovie() {
         // Arrange
-        String watchlistId = "watchlistId";
-        String movieId = "movieId";
-        HashSet<String> movieIds = new HashSet<>();
-        movieIds.add("1");
         Watchlist watchlist = Watchlist.builder()
-                .id("1")
-                .title("title 1")
-                .description("description 1")
-                .movieIds(movieIds)
+                .id("id")
+                .title("test title watchlist")
+                .description("test description")
+                .movieIds(new HashSet<>(Arrays.asList("123")))
+                .userId("123")
+                .build();
+        Movie movie = Movie.builder()
+                .title("test title")
+                .type("movie")
+                .plot("test plot")
+                .actors("henk")
+                .country("USA")
+                .language("English")
+                .poster("")
+                .year("2001")
+                .imdbID("123")
+                .build();
+        MovieResponseDto movieResponseDto = MovieResponseDto.builder()
+                .title(movie.getTitle())
+                .type(movie.getType())
+                .plot(movie.getPlot())
+                .actors(movie.getActors())
+                .country(movie.getCountry())
+                .language(movie.getLanguage())
+                .poster(movie.getPoster())
+                .year(movie.getYear())
+                .build();
+        WatchlistResponseDto watchlistResponseDto = WatchlistResponseDto.builder()
+                .title(watchlist.getTitle())
+                .description(watchlist.getDescription())
+                .userId(watchlist.getUserId())
+                .movies(Set.of(movieResponseDto))
                 .build();
         when(encryptionUtils.decrypt(any())).thenReturn("1");
         when(watchlistRepository.findById(anyString())).thenReturn(Optional.of(watchlist));
-        when(watchlistMapper.mapWatchlistToWatchlistResponseDto(any(Watchlist.class))).thenReturn(new WatchlistResponseDto());
-        when(movieClient.findById(anyString(), anyString())).thenReturn(new Movie());
+        when(watchlistMapper.mapWatchlistToWatchlistResponseDto(any(Watchlist.class))).thenReturn(watchlistResponseDto);
+        when(movieClient.findById(anyString(), eq(movie.getImdbID()))).thenReturn(movie);
 
         // Act
-        WatchlistResponseDto result = watchlistService.addMovie(watchlistId, movieId);
+        WatchlistResponseDto result = watchlistService.addMovie(watchlist.getId(), movie.getImdbID());
 
         // Assert
         assertEquals(WatchlistResponseDto.class, result.getClass());
@@ -172,23 +242,46 @@ public class WatchlistServiceTest {
     @Test
     public void testRemoveMovie() {
         // Arrange
-        String watchlistId = "watchlistId";
-        String movieId = "movieId";
-        HashSet<String> movieIds = new HashSet<>();
-        movieIds.add("1");
         Watchlist watchlist = Watchlist.builder()
-                .id("1")
-                .title("title 1")
-                .description("description 1")
-                .movieIds(movieIds)
+                .id("id")
+                .title("test title watchlist")
+                .description("test description")
+                .movieIds(new HashSet<>(Arrays.asList("123")))
+                .userId("123")
                 .build();
-        when(encryptionUtils.decrypt(any())).thenReturn("1");
+        Movie movie = Movie.builder()
+                .title("test title")
+                .type("movie")
+                .plot("test plot")
+                .actors("henk")
+                .country("USA")
+                .language("English")
+                .poster("")
+                .year("2001")
+                .imdbID("123")
+                .build();
+        MovieResponseDto movieResponseDto = MovieResponseDto.builder()
+                .title(movie.getTitle())
+                .type(movie.getType())
+                .plot(movie.getPlot())
+                .actors(movie.getActors())
+                .country(movie.getCountry())
+                .language(movie.getLanguage())
+                .poster(movie.getPoster())
+                .year(movie.getYear())
+                .build();
+        WatchlistResponseDto watchlistResponseDto = WatchlistResponseDto.builder()
+                .title(watchlist.getTitle())
+                .description(watchlist.getDescription())
+                .userId(watchlist.getUserId())
+                .movies(Set.of(movieResponseDto))
+                .build();
+
         when(watchlistRepository.findById(anyString())).thenReturn(Optional.of(watchlist));
-        when(watchlistMapper.mapWatchlistToWatchlistResponseDto(any(Watchlist.class))).thenReturn(new WatchlistResponseDto());
-        when(movieClient.findById(anyString(), anyString())).thenReturn(new Movie());
+        when(watchlistMapper.mapWatchlistToWatchlistResponseDto(any(Watchlist.class))).thenReturn(watchlistResponseDto);
 
         // Act
-        WatchlistResponseDto result = watchlistService.removeMovie(watchlistId, movieId);
+        WatchlistResponseDto result = watchlistService.removeMovie(watchlist.getId(), movie.getImdbID());
 
         // Assert
         assertEquals(WatchlistResponseDto.class, result.getClass());
@@ -276,7 +369,7 @@ public class WatchlistServiceTest {
 
         when(encryptionUtils.decrypt(any())).thenReturn("1");
         when(watchlistRepository.findByUserId(anyString())).thenReturn(watchlists);
-       when(watchlistMapper.mapWatchlistToWatchlistResponseDto(any(Watchlist.class))).thenReturn(watchlistResponseDto);
+        when(watchlistMapper.mapWatchlistToWatchlistResponseDto(any(Watchlist.class))).thenReturn(watchlistResponseDto);
         when(movieClient.findById(anyString(), anyString())).thenReturn(movie);
 
         // Act

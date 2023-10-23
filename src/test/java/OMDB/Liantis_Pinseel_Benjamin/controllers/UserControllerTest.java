@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
@@ -36,15 +37,26 @@ class UserControllerTest {
     @Test
     void findAllTest() {
         // Arrange
-        PageDto<UserResponseDto> pageDto = new PageDto<UserResponseDto>();
-        when(userService.findAll(anyInt(), anyInt())).thenReturn(Page.empty());
+        Set<UserResponseDto> userResponseDtos = Set.of(UserResponseDto.builder()
+                .firstName("Jan")
+                .lastName("Deman")
+                .nickName("JD")
+                .age(30)
+                .build());
+
+        PageDto<UserResponseDto> pageDto = PageDto.<UserResponseDto>builder()
+                .totalPages(1)
+                .totalElements(1)
+                .responseDtos(userResponseDtos)
+                .build();
+        when(userService.findAll(1, 10 )).thenReturn(Page.empty());
         when(userMapper.mapToPageDto(any())).thenReturn(pageDto);
 
         // Act
-        PageDto<UserResponseDto> result = userController.findAll(0, 10);
+        PageDto<UserResponseDto> result = userController.findAll(1, 10);
 
         // Assert
-        verify(userService, times(1)).findAll(0, 10);
+        verify(userService, times(1)).findAll(1, 10);
         verify(userMapper, times(1)).mapToPageDto(any());
         assertEquals(pageDto, result);
     }
@@ -53,7 +65,12 @@ class UserControllerTest {
     @Test
     void findByIdTest() {
         // Arrange
-        UserResponseDto userResponseDto = new UserResponseDto();
+        UserResponseDto userResponseDto = UserResponseDto.builder()
+                .firstName("Jan")
+                .lastName("Deman")
+                .nickName("JD")
+                .age(30)
+                .build();
         when(userService.findById(anyString())).thenReturn(Optional.of(new User()));
         when(userMapper.mapUserToUserResponseDto(any())).thenReturn(userResponseDto);
 
@@ -70,30 +87,51 @@ class UserControllerTest {
     @Test
     void createTest() {
         // Arrange
-        String userId = "user1";
-        UserCreateDto userCreateDto = new UserCreateDto();
+        UserCreateDto userCreateDto = UserCreateDto.builder()
+                .firstName("Jan")
+                .lastName("Deman")
+                .nickName("JD")
+                .age(30)
+                .build();
 
         // Act
         userController.create(userCreateDto);
 
         // Assert
-        verify(userService, times(1)).save(any());
+        verify(userService, times(1)).save(eq(userCreateDto));
     }
 
     // Test for updating a user
     @Test
     void updateTest() {
         // Arrange
-        UserResponseDto userResponseDto = new UserResponseDto();
-        UserUpdateRequestDto userUpdateRequestDto = UserUpdateRequestDto.builder().build();
-        when(userService.update(anyString(), any())).thenReturn(new User());
+        User user = User.builder()
+                .firstName("Jan")
+                .lastName("Deman")
+                .nickName("JD")
+                .age(30)
+                .build();
+        UserResponseDto userResponseDto = UserResponseDto.builder()
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .nickName(user.getNickName())
+                .age(user.getAge())
+                .build();
+        String userId = "userId";
+        UserUpdateRequestDto userUpdateRequestDto = UserUpdateRequestDto.builder()
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .age(user.getAge())
+                .nickName(user.getNickName())
+                .build();
+        when(userService.update(userId, userUpdateRequestDto)).thenReturn(user);
         when(userMapper.mapUserToUserResponseDto(any())).thenReturn(userResponseDto);
 
         // Act
-        UserResponseDto result = userController.update("1", userUpdateRequestDto);
+        UserResponseDto result = userController.update(userId, userUpdateRequestDto);
 
         // Assert
-        verify(userService, times(1)).update("1", userUpdateRequestDto);
+        verify(userService, times(1)).update(userId, userUpdateRequestDto);
         verify(userMapper, times(1)).mapUserToUserResponseDto(any());
         assertEquals(userResponseDto, result);
     }

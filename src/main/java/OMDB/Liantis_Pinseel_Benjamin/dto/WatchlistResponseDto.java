@@ -9,8 +9,6 @@ import java.util.Set;
 
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class WatchlistResponseDto {
     private String title;
     private String description;
