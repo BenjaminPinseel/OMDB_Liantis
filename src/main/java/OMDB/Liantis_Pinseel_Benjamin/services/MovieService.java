@@ -86,8 +86,9 @@ public class MovieService {
         Set<MovieResponseDto> responseDtos = movieListDto.getSearch().stream()
                 .map(movie -> movieMapper.mapMovieToMovieShortResponseDto(movie))
                 .collect(Collectors.toSet());
+        int totalPages = (int) Math.ceil((double) movieListDto.getTotalResults() / 10);
         return new PageDto<MovieResponseDto>(
-                movieListDto.getTotalResults() / 10,
+                totalPages,
                 movieListDto.getTotalResults(),
                 responseDtos
         );

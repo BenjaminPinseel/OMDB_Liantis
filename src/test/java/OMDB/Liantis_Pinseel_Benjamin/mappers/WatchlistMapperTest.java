@@ -18,8 +18,8 @@ class WatchlistMapperTest {
                 .build();
 
         Watchlist watchlist = watchlistMapper.mapWatchlistCreateDtoToWatchlist(watchlistCreateDto);
-        assertEquals("Test Title", watchlist.getTitle());
-        assertEquals("Test Description", watchlist.getDescription());
+        assertEquals(watchlistCreateDto.getTitle(), watchlist.getTitle());
+        assertEquals(watchlistCreateDto.getDescription(), watchlist.getDescription());
     }
 
     @Test
@@ -31,8 +31,8 @@ class WatchlistMapperTest {
                 .build();
 
         WatchlistResponseDto watchlistResponseDto = watchlistMapper.mapWatchlistToWatchlistResponseDto(watchlist);
-        assertEquals("Test Title", watchlistResponseDto.getTitle());
-        assertEquals("Test Description", watchlistResponseDto.getDescription());
-        assertEquals("6fa459ea-ee8a-3ca4-894e-db77e160355e", watchlistResponseDto.getUserId());
+        assertEquals(watchlist.getTitle(), watchlistResponseDto.getTitle());
+        assertEquals(watchlist.getDescription(), watchlistResponseDto.getDescription());
+        assertEquals(watchlist.getUserId(), watchlistResponseDto.getUserId());
     }
 }

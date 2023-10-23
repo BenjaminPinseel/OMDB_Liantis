@@ -2,6 +2,7 @@ package OMDB.Liantis_Pinseel_Benjamin.mappers;
 
 import OMDB.Liantis_Pinseel_Benjamin.clients.Movie;
 import OMDB.Liantis_Pinseel_Benjamin.dto.MovieResponseDto;
+import OMDB.Liantis_Pinseel_Benjamin.dto.PageDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -34,7 +35,19 @@ public class MovieMapperTests {
 
         Page<Movie> moviePage = new PageImpl<>(Collections.singletonList(movie));
 
-        assertEquals(1, movieMapper.mapToPageDtoDetailed(moviePage).getTotalElements());
+        PageDto<MovieResponseDto> result = movieMapper.mapToPageDtoDetailed(moviePage);
+        assertEquals(1, result.getTotalElements());
+        assertEquals(movie.getTitle(), result.getResponseDtos().iterator().next().getTitle());
+        assertEquals(movie.getYear(), result.getResponseDtos().iterator().next().getYear());
+        assertEquals(movie.getDirector(), result.getResponseDtos().iterator().next().getDirector());
+        assertEquals(movie.getActors(), result.getResponseDtos().iterator().next().getActors());
+        assertEquals(movie.getGenre(), result.getResponseDtos().iterator().next().getGenre());
+        assertEquals(movie.getLanguage(), result.getResponseDtos().iterator().next().getLanguage());
+        assertEquals(movie.getCountry(), result.getResponseDtos().iterator().next().getCountry());
+        assertEquals(movie.getRuntime(), result.getResponseDtos().iterator().next().getRuntime());
+        assertEquals(movie.getRated(), result.getResponseDtos().iterator().next().getRated());
+        assertEquals(movie.getPlot(), result.getResponseDtos().iterator().next().getPlot());
+        assertEquals(movie.getPoster(), result.getResponseDtos().iterator().next().getPoster());
     }
 
     @Test
@@ -56,7 +69,17 @@ public class MovieMapperTests {
 
         Page<Movie> moviePage = new PageImpl<>(Collections.singletonList(movie));
 
-        assertEquals(1, movieMapper.mapToPageDtoShort(moviePage).getTotalElements());
+        PageDto<MovieResponseDto> result = movieMapper.mapToPageDtoShort(moviePage);
+        assertEquals(1, result.getTotalElements());
+        assertEquals(movie.getTitle(), result.getResponseDtos().iterator().next().getTitle());
+        assertEquals(movie.getYear(), result.getResponseDtos().iterator().next().getYear());
+        assertEquals(movie.getDirector(), result.getResponseDtos().iterator().next().getDirector());
+        assertEquals(movie.getActors(), result.getResponseDtos().iterator().next().getActors());
+        assertEquals(movie.getGenre(), result.getResponseDtos().iterator().next().getGenre());
+        assertEquals(movie.getLanguage(), result.getResponseDtos().iterator().next().getLanguage());
+        assertEquals(movie.getCountry(), result.getResponseDtos().iterator().next().getCountry());
+        assertEquals(movie.getRated(), result.getResponseDtos().iterator().next().getRated());
+        assertEquals(movie.getPlot(), result.getResponseDtos().iterator().next().getPlot());
     }
 
     @Test
@@ -79,15 +102,15 @@ public class MovieMapperTests {
                 .build();
 
         MovieResponseDto movieShortResponseDto = movieMapper.mapMovieToMovieShortResponseDto(movie);
-        assertEquals("Inception", movieShortResponseDto.getTitle());
-        assertEquals("2010", movieShortResponseDto.getYear());
-        assertEquals("PG-13", movieShortResponseDto.getRated());
-        assertEquals("Action, Adventure, Sci-Fi", movieShortResponseDto.getGenre());
-        assertEquals("Christopher Nolan", movieShortResponseDto.getDirector());
-        assertEquals("Leonardo DiCaprio, Joseph Gordon-Levitt, Elliot Page", movieShortResponseDto.getActors());
-        assertEquals("English, Japanese, French", movieShortResponseDto.getLanguage());
-        assertEquals("United States, United Kingdom", movieShortResponseDto.getCountry());
-        assertEquals("A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O., but his tragic past may doom the project and his team to disaster.", movieShortResponseDto.getPlot());
+        assertEquals(movie.getTitle(), movieShortResponseDto.getTitle());
+        assertEquals(movie.getYear(), movieShortResponseDto.getYear());
+        assertEquals(movie.getRated(), movieShortResponseDto.getRated());
+        assertEquals(movie.getGenre(), movieShortResponseDto.getGenre());
+        assertEquals(movie.getDirector(), movieShortResponseDto.getDirector());
+        assertEquals(movie.getActors(), movieShortResponseDto.getActors());
+        assertEquals(movie.getLanguage(), movieShortResponseDto.getLanguage());
+        assertEquals(movie.getCountry(), movieShortResponseDto.getCountry());
+        assertEquals(movie.getPlot(), movieShortResponseDto.getPlot());
     }
 
     @Test
@@ -110,18 +133,18 @@ public class MovieMapperTests {
                 .build();
 
         MovieResponseDto movieDetailedResponseDto = movieMapper.mapMovieToDetailedMovieResponseDto(movie);
-        assertEquals("Inception", movieDetailedResponseDto.getTitle());
-        assertEquals("2010", movieDetailedResponseDto.getYear());
-        assertEquals("PG-13", movieDetailedResponseDto.getRated());
-        assertEquals("Action, Adventure, Sci-Fi", movieDetailedResponseDto.getGenre());
-        assertEquals("Christopher Nolan", movieDetailedResponseDto.getDirector());
-        assertEquals("Christopher Nolan", movieDetailedResponseDto.getWriter());
-        assertEquals("Leonardo DiCaprio, Joseph Gordon-Levitt, Elliot Page", movieDetailedResponseDto.getActors());
-        assertEquals("English, Japanese, French", movieDetailedResponseDto.getLanguage());
-        assertEquals("United States, United Kingdom", movieDetailedResponseDto.getCountry());
-        assertEquals("148 min", movieDetailedResponseDto.getRuntime());
-        assertEquals("A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O., but his tragic past may doom the project and his team to disaster.", movieDetailedResponseDto.getPlot());
-        assertEquals("https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg", movieDetailedResponseDto.getPoster());
+        assertEquals(movie.getTitle(), movieDetailedResponseDto.getTitle());
+        assertEquals(movie.getYear(), movieDetailedResponseDto.getYear());
+        assertEquals(movie.getRated(), movieDetailedResponseDto.getRated());
+        assertEquals(movie.getGenre(), movieDetailedResponseDto.getGenre());
+        assertEquals(movie.getDirector(), movieDetailedResponseDto.getDirector());
+        assertEquals(movie.getWriter(), movieDetailedResponseDto.getWriter());
+        assertEquals(movie.getActors(), movieDetailedResponseDto.getActors());
+        assertEquals(movie.getLanguage(), movieDetailedResponseDto.getLanguage());
+        assertEquals(movie.getCountry(), movieDetailedResponseDto.getCountry());
+        assertEquals(movie.getRuntime(), movieDetailedResponseDto.getRuntime());
+        assertEquals(movie.getPlot(), movieDetailedResponseDto.getPlot());
+        assertEquals(movie.getPoster(), movieDetailedResponseDto.getPoster());
     }
 
 

@@ -1,5 +1,6 @@
 package OMDB.Liantis_Pinseel_Benjamin.mappers;
 
+import OMDB.Liantis_Pinseel_Benjamin.dto.PageDto;
 import OMDB.Liantis_Pinseel_Benjamin.dto.UserCreateDto;
 import OMDB.Liantis_Pinseel_Benjamin.dto.UserResponseDto;
 import OMDB.Liantis_Pinseel_Benjamin.entities.User;
@@ -22,11 +23,17 @@ class UserMapperTests {
                 .lastName("Deman")
                 .nickName("JDem")
                 .age(27)
-                .email("jandeman@hotmail.com")
                 .build();
         Page<User> userPage = new PageImpl<>(Collections.singletonList(user));
 
+        PageDto<UserResponseDto> result = userMapper.mapToPageDto(userPage);
+
         assertEquals(1, userMapper.mapToPageDto(userPage).getTotalElements());
+        UserResponseDto userResponseDto = result.getResponseDtos().iterator().next();
+        assertEquals(user.getFirstName(), userResponseDto.getFirstName());
+        assertEquals(user.getLastName(), userResponseDto.getLastName());
+        assertEquals(user.getNickName(), userResponseDto.getNickName());
+        assertEquals(user.getAge(), userResponseDto.getAge());
     }
 
     @Test

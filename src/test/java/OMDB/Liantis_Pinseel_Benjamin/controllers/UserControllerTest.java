@@ -85,7 +85,7 @@ class UserControllerTest {
     void updateTest() {
         // Arrange
         UserResponseDto userResponseDto = new UserResponseDto();
-        UserUpdateRequestDto userUpdateRequestDto = new UserUpdateRequestDto();
+        UserUpdateRequestDto userUpdateRequestDto = UserUpdateRequestDto.builder().build();
         when(userService.update(anyString(), any())).thenReturn(new User());
         when(userMapper.mapUserToUserResponseDto(any())).thenReturn(userResponseDto);
 

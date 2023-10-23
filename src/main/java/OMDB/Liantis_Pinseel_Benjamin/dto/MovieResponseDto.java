@@ -12,7 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MovieResponseDto {
-    private String Title;
+    private String title;
     private String year;
     private String genre;
     private String director;
