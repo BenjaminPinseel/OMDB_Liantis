@@ -11,7 +11,9 @@ import OMDB.Liantis_Pinseel_Benjamin.mappers.MovieMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -92,19 +94,19 @@ public class MovieService {
             throw new NullPointerException("API key was not found");
         }
         MovieListDto movieListDto = movieClient.findAll(decryptedApiKey(), title, type, year, page);
-        if (movieListDto == null){
-            throw new ResourceNotFoundException("No movies found");
-        }
-        else{
-            Set<MovieResponseDto> responseDtos = movieListDto.getSearch().stream()
+
+        Set<MovieResponseDto> response = new HashSet<>();
+        if(!CollectionUtils.isEmpty(movieListDto.getSearch())) {
+            response = movieListDto.getSearch().stream()
                     .map(movie -> movieMapper.mapMovieToMovieShortResponseDto(movie))
                     .collect(Collectors.toSet());
-            int totalPages = (int) Math.ceil((double) movieListDto.getTotalResults() / 10);
-            return new PageDto<MovieResponseDto>(
-                    totalPages,
-                    movieListDto.getTotalResults(),
-                    responseDtos
-            );
         }
+        int totalPages = (int) Math.ceil((double) movieListDto.getTotalResults() / 10);
+        return new PageDto<MovieResponseDto>(
+                totalPages,
+                movieListDto.getTotalResults(),
+                response
+        );
     }
+
 }

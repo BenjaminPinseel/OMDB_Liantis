@@ -68,11 +68,11 @@ public class MovieServiceTest {
                 .year(movie.getYear())
                 .build();
         when(encryptionUtils.decrypt(any())).thenReturn("1");
-        when(movieClient.findById(anyString(), anyString(), anyString(), anyInt(), anyString(), anyString())).thenReturn(movie);
+        when(movieClient.findById(anyString(), anyString())).thenReturn(movie);
         when(movieMapper.mapMovieToDetailedMovieResponseDto(movie)).thenReturn(movieResponseDto);
 
         // Act
-        MovieResponseDto result = movieService.findById(movie.getImdbID(), movie.getType(), Integer.parseInt(movie.getYear()), "short", "json");
+        MovieResponseDto result = movieService.findById(movie.getImdbID());
 
         // Assert
         assertEquals(MovieResponseDto.class, result.getClass());
