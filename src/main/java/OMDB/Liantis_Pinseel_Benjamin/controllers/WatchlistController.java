@@ -4,6 +4,7 @@ import OMDB.Liantis_Pinseel_Benjamin.dto.WatchlistCreateDto;
 import OMDB.Liantis_Pinseel_Benjamin.dto.WatchlistResponseDto;
 import OMDB.Liantis_Pinseel_Benjamin.dto.WatchlistUpdateRequestDto;
 import OMDB.Liantis_Pinseel_Benjamin.entities.Watchlist;
+import OMDB.Liantis_Pinseel_Benjamin.exceptions.ResourceNotFoundException;
 import OMDB.Liantis_Pinseel_Benjamin.mappers.WatchlistMapper;
 import OMDB.Liantis_Pinseel_Benjamin.services.WatchlistService;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -44,11 +45,20 @@ public class WatchlistController {
         watchlistService.save(watchlistCreateDto, userId);
     }
 
-    @PutMapping("/update")
-    public WatchlistResponseDto update(@Valid WatchlistUpdateRequestDto watchlistUpdateRequestDto) {
+    @PutMapping({"/", ""})
+    public ResponseEntity<?> update(@RequestBody @Valid WatchlistUpdateRequestDto watchlistUpdateRequestDto) {
+        WatchlistResponseDto watchlist = watchlistService.findById(watchlistUpdateRequestDto.getId());
+        if (watchlist == null) {
+            throw new ResourceNotFoundException("Watchlist not found");
+        }
+
+        if (!StringUtils.equalsIgnoreCase(watchlist.getUserId(), watchlistUpdateRequestDto.getUserId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User ID does not match the owner of the watchlist");
+        }
         Watchlist updatedWatchlist = watchlistService.update(watchlistUpdateRequestDto);
-        return watchlistMapper.mapWatchlistToWatchlistResponseDto(updatedWatchlist);
+        return ResponseEntity.ok().body(watchlistMapper.mapWatchlistToWatchlistResponseDto(updatedWatchlist));
     }
+
 
     @PostMapping("/{watchlistId}/movie/{movieId}")
     public ResponseEntity<?> addMovie(@PathVariable String watchlistId, @PathVariable String movieId, @RequestHeader @NotBlank String userId) {
@@ -61,7 +71,7 @@ public class WatchlistController {
         }
     }
 
-    @PutMapping("/{watchlistId}/movie/{movieId}")
+    @DeleteMapping("/{watchlistId}/movie/{movieId}")
     public ResponseEntity<?> removeMovie(@PathVariable String watchlistId, @PathVariable String movieId, @RequestHeader String userId) {
         WatchlistResponseDto watchlistData = watchlistService.findById(watchlistId);
         if (!StringUtils.equals(watchlistData.getUserId(), userId)) {

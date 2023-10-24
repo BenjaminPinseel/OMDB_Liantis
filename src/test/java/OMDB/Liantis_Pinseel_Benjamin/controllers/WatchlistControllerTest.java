@@ -267,9 +267,10 @@ class WatchlistControllerTest {
                 .build();
 
         WatchlistResponseDto watchlistResponseDto = WatchlistResponseDto.builder()
+                .id("1")
                 .title("title 1")
                 .description("description 1")
-                .userId("1")
+                .userId("userid")
                 .movies(Set.of(movieResponseDto))
                 .build();
         WatchlistUpdateRequestDto watchlistUpdateRequestDto = WatchlistUpdateRequestDto.builder()
@@ -283,14 +284,15 @@ class WatchlistControllerTest {
                 .userId(watchlistUpdateRequestDto.getUserId())
                 .description(watchlistUpdateRequestDto.getDescription())
                 .build();
+        when(watchlistService.findById(watchlistUpdateRequestDto.getId())).thenReturn(watchlistResponseDto);
         when(watchlistService.update(watchlistUpdateRequestDto)).thenReturn(watchlist);
         when(watchlistMapper.mapWatchlistToWatchlistResponseDto(watchlist)).thenReturn(watchlistResponseDto);
 
         // Act
-        WatchlistResponseDto result = watchlistController.update(watchlistUpdateRequestDto);
+        ResponseEntity<?> result = watchlistController.update(watchlistUpdateRequestDto);
 
         // Assert
-        assertEquals(watchlistResponseDto, result);
+        assertEquals(watchlistResponseDto, result.getBody());
         verify(watchlistService, times(1)).update(watchlistUpdateRequestDto);
         verify(watchlistMapper, times(1)).mapWatchlistToWatchlistResponseDto(watchlist);
     }

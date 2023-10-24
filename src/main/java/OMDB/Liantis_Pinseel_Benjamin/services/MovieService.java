@@ -17,8 +17,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static java.lang.Boolean.parseBoolean;
-
 @Service
 @RequiredArgsConstructor
 public class MovieService {
@@ -38,7 +36,7 @@ public class MovieService {
     /**
      * Fetches a movie by its ID.
      *
-     * @param id         The ID of the movie to be retrieved.
+     * @param id The ID of the movie to be retrieved.
      * @throws NullPointerException if the API key is not found.
      */
     public MovieResponseDto findById(String id) {
@@ -46,10 +44,9 @@ public class MovieService {
             throw new NullPointerException("API key was not found");
         }
         Movie movie = movieClient.findById(decryptedApiKey(), id);
-        if (movie == null || (!Boolean.parseBoolean(movie.getResponse()))){
+        if (movie == null || (!Boolean.parseBoolean(movie.getResponse()))) {
             throw new ResourceNotFoundException("No movie found with this id");
-        }
-        else{
+        } else {
             return movieMapper.mapMovieToDetailedMovieResponseDto(movie);
         }
 
@@ -71,10 +68,9 @@ public class MovieService {
             throw new NullPointerException("API key was not found");
         }
         Movie movie = movieClient.findByTitle(decryptedApiKey(), title, type, year, plot, returnType);
-        if (movie == null || (!Boolean.parseBoolean(movie.getResponse()))){
+        if (movie == null || (!Boolean.parseBoolean(movie.getResponse()))) {
             throw new ResourceNotFoundException("No movie found with this title");
-        }
-        else{
+        } else {
             return movieMapper.mapMovieToDetailedMovieResponseDto(movie);
         }
     }
@@ -96,7 +92,7 @@ public class MovieService {
         MovieListDto movieListDto = movieClient.findAll(decryptedApiKey(), title, type, year, page);
 
         Set<MovieResponseDto> response = new HashSet<>();
-        if(!CollectionUtils.isEmpty(movieListDto.getSearch())) {
+        if (!CollectionUtils.isEmpty(movieListDto.getSearch())) {
             response = movieListDto.getSearch().stream()
                     .map(movie -> movieMapper.mapMovieToMovieShortResponseDto(movie))
                     .collect(Collectors.toSet());

@@ -14,11 +14,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @NotNull
-    private String id;
-
     @Setter
     @NotNull
     @Size(min = 1, max = 50)
@@ -40,5 +35,9 @@ public class User {
     @Setter
     @Email
     public String email;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @NotNull
+    private String id;
 
 }
