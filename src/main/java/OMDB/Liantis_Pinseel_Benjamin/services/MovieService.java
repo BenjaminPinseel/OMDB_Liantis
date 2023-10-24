@@ -34,18 +34,13 @@ public class MovieService {
      * Fetches a movie by its ID.
      *
      * @param id         The ID of the movie to be retrieved.
-     * @param type       The type of the movie (optional).
-     * @param year       The release year of the movie (optional).
-     * @param plot       The plot type of the movie (optional).
-     * @param returnType The type of data to be returned (optional).
-     * @return MovieResponseDto containing the details of the movie.
      * @throws NullPointerException if the API key is not found.
      */
-    public MovieResponseDto findById(String id, String type, int year, String plot, String returnType) {
+    public MovieResponseDto findById(String id) {
         if (decryptedApiKey() == null) {
             throw new NullPointerException("API key was not found");
         }
-        Movie movie = movieClient.findById(decryptedApiKey(), id, type, year, plot, returnType);
+        Movie movie = movieClient.findById(decryptedApiKey(), id);
         return movieMapper.mapMovieToDetailedMovieResponseDto(movie);
     }
 

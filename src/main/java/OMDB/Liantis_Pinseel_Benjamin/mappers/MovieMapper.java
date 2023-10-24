@@ -42,6 +42,7 @@ public class MovieMapper {
 
     public MovieResponseDto mapMovieToMovieShortResponseDto(Movie movie) {
         return MovieResponseDto.builder()
+                .id(movie.getImdbID())
                 .actors(movie.getActors())
                 .country(movie.getCountry())
                 .director(movie.getDirector())
@@ -58,6 +59,7 @@ public class MovieMapper {
 
     public MovieResponseDto mapMovieToDetailedMovieResponseDto(Movie movie) {
         return MovieResponseDto.builder()
+                .id(movie.getImdbID())
                 .actors(movie.getActors())
                 .country(movie.getCountry())
                 .director(movie.getDirector())

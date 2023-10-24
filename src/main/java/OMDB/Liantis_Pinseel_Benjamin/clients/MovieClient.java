@@ -11,16 +11,6 @@ public interface MovieClient {
     @GetMapping("/")
     Movie findById(
             @RequestParam(value = "apikey") String apiKey,
-            @RequestParam(value = "i") String id,
-            @RequestParam(value = "type", required = false) String type,
-            @RequestParam(value = "y", required = false) Integer year,
-            @RequestParam(value = "plot", required = false) String plot,
-            @RequestParam(value = "r", required = false) String returnType
-    );
-
-    @GetMapping("/")
-    Movie findById(
-            @RequestParam(value = "apikey") String apiKey,
             @RequestParam(value = "i") String id
     );
 

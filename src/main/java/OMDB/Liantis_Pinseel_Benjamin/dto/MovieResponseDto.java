@@ -10,6 +10,7 @@ import java.util.Set;
 @Data
 @Builder()
 public class MovieResponseDto {
+    private String id;
     private String title;
     private String year;
     private String genre;

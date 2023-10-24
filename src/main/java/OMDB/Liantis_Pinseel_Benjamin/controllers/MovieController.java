@@ -20,13 +20,9 @@ public class MovieController {
 
 
     @GetMapping("/id/{id}")
-    public MovieResponseDto findById(@PathVariable @NotNull @NotBlank String id,
-                                     @RequestParam(required = false) final String type,
-                                     @RequestParam(required = false) final int year,
-                                     @RequestParam(required = false) final String plot,
-                                     @RequestParam(required = false) final String returnType
+    public MovieResponseDto findById(@PathVariable @NotNull @NotBlank String id
     ) {
-        return movieService.findById(id, type, year, plot, returnType);
+        return movieService.findById(id);
     }
 
     @GetMapping("/title/{title}")
@@ -39,7 +35,7 @@ public class MovieController {
         return movieService.findByTitle(title, type, year, plot, returnType);
     }
 
-    @GetMapping("/")
+    @GetMapping({"/", ""})
     public PageDto<MovieResponseDto> findAll(
             @RequestParam() final String title,
             @RequestParam(required = false) final String type,
