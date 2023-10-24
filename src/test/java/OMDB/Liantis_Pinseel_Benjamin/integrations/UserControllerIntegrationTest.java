@@ -3,10 +3,9 @@ package OMDB.Liantis_Pinseel_Benjamin.integrations;
 import OMDB.Liantis_Pinseel_Benjamin.dto.UserCreateDto;
 import OMDB.Liantis_Pinseel_Benjamin.dto.UserResponseDto;
 import OMDB.Liantis_Pinseel_Benjamin.dto.UserUpdateRequestDto;
+import OMDB.Liantis_Pinseel_Benjamin.entities.User;
+import OMDB.Liantis_Pinseel_Benjamin.repositories.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.flywaydb.core.Flyway;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -20,6 +19,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.util.AssertionErrors.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,17 +33,10 @@ public class UserControllerIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private ObjectMapper objectMapper;
+    private UserRepository userRepository;
 
     @Autowired
-    private Flyway flyway;
-
-    @BeforeEach
-    void clearDatabase(){
-        flyway.clean();
-        flyway.migrate();
-    }
-
+    private ObjectMapper objectMapper;
 
     @Test
     @Sql("/userData.sql")
@@ -55,12 +48,13 @@ public class UserControllerIntegrationTest {
         final UserResponseDto user = objectMapper.readValue(result.getResponse().getContentAsString(), UserResponseDto.class);
 
         assertNotNull("User response should not be null", user);
-        assertEquals( "firstname", user.getFirstName(), "Expected firstName not found");
-        assertEquals( "lastname", user.getLastName(), "Expected lastName not found");
+        assertEquals("firstname", user.getFirstName(), "Expected firstName not found");
+        assertEquals("lastname", user.getLastName(), "Expected lastName not found");
         assertEquals(30, user.getAge(), "Expected age not found");
         assertEquals("nickname", user.getNickName(), "Expected nickname not found");
 
     }
+
     @Test
     @Sql("/userData.sql")
     public void givenValidUserCreateDto_whenCreateEndpointCalled_thenUserShouldBeCreated() throws Exception {
@@ -77,7 +71,10 @@ public class UserControllerIntegrationTest {
                         .content(objectMapper.writeValueAsString(userCreateDto))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
+
+        assertEquals(userRepository.findAll().size(), 2);
     }
+
     @Test
     @Sql("/userData.sql")
     public void givenValidUserUpdateRequestDto_whenUpdateEndpointCalled_thenUserShouldBeUpdated() throws Exception {
@@ -96,7 +93,15 @@ public class UserControllerIntegrationTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
+        User user = userRepository.findById("id").get();
+
+        assertEquals(user.getFirstName(), userUpdateRequestDto.getFirstName());
+        assertEquals(user.getLastName(), userUpdateRequestDto.getLastName());
+        assertEquals(user.getAge(), userUpdateRequestDto.getAge());
+        assertEquals(user.getNickName(), userUpdateRequestDto.getNickName());
+        assertEquals(user.getEmail(), userUpdateRequestDto.getEmail());
     }
+
     @Test
     @Sql("/userData.sql")
     public void givenValidUserId_whenDeleteEndpointCalled_thenUserShouldBeDeleted() throws Exception {
@@ -105,5 +110,6 @@ public class UserControllerIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.delete("/user/{id}", id))
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
 
+        assertTrue(userRepository.findById(id).isEmpty());
     }
 }

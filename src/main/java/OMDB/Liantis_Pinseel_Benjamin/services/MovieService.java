@@ -78,7 +78,7 @@ public class MovieService {
      * @return Set of MovieResponseDto containing details of the movies.
      * @throws NullPointerException if the API key is not found.
      */
-    public PageDto<MovieResponseDto> findAll(String title, String type, int year, int page) {
+    public PageDto<MovieResponseDto> findAll(String title, String type, Integer year, int page) {
         if (decryptedApiKey() == null) {
             throw new NullPointerException("API key was not found");
         }

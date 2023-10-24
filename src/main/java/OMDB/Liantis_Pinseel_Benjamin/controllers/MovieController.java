@@ -43,8 +43,8 @@ public class MovieController {
     public PageDto<MovieResponseDto> findAll(
             @RequestParam() final String title,
             @RequestParam(required = false) final String type,
-            @RequestParam(required = false) final int year,
-            @RequestParam(required = false, defaultValue = "0") final int page
+            @RequestParam(required = false) final Integer year,
+            @RequestParam(required = false, defaultValue = "1") final int page
     ) {
         return movieService.findAll(title, type, year, page);
     }

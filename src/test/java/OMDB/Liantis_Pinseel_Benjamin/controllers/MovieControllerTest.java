@@ -100,7 +100,7 @@ class MovieControllerTest {
         // Arrange
         String title = "Test Title";
         String type = "movie";
-        int year = 2021;
+        Integer year = 2021;
         int page = 1;
 
         Set<MovieResponseDto> movieResponseDtos = new HashSet<>();

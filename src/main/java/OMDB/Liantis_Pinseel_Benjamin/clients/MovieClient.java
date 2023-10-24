@@ -13,7 +13,7 @@ public interface MovieClient {
             @RequestParam(value = "apikey") String apiKey,
             @RequestParam(value = "i") String id,
             @RequestParam(value = "type", required = false) String type,
-            @RequestParam(value = "y", required = false) int year,
+            @RequestParam(value = "y", required = false) Integer year,
             @RequestParam(value = "plot", required = false) String plot,
             @RequestParam(value = "r", required = false) String returnType
     );
@@ -29,7 +29,7 @@ public interface MovieClient {
             @RequestParam(value = "apikey") String apiKey,
             @RequestParam(value = "t") String title,
             @RequestParam(value = "type") String type,
-            @RequestParam(value = "y") int year,
+            @RequestParam(value = "y") Integer year,
             @RequestParam(value = "plot") String plot,
             @RequestParam(value = "r") String returnType
     );
@@ -39,7 +39,7 @@ public interface MovieClient {
             @RequestParam(value = "apikey") String apiKey,
             @RequestParam(value = "s") String title,
             @RequestParam(value = "type") String type,
-            @RequestParam(value = "y") int year,
+            @RequestParam(value = "y") Integer year,
             @RequestParam(value = "page") int page
     );
 }
