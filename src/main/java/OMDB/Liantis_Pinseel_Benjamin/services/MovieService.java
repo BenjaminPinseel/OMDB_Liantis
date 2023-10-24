@@ -42,7 +42,13 @@ public class MovieService {
             throw new NullPointerException("API key was not found");
         }
         Movie movie = movieClient.findById(decryptedApiKey(), id);
-        return movieMapper.mapMovieToDetailedMovieResponseDto(movie);
+        if (movie == null){
+            throw new ResourceNotFoundException("No movie found with this id");
+        }
+        else{
+            return movieMapper.mapMovieToDetailedMovieResponseDto(movie);
+        }
+
     }
 
     /**
@@ -61,7 +67,12 @@ public class MovieService {
             throw new NullPointerException("API key was not found");
         }
         Movie movie = movieClient.findByTitle(decryptedApiKey(), title, type, year, plot, returnType);
-        return movieMapper.mapMovieToDetailedMovieResponseDto(movie);
+        if (movie == null){
+            throw new ResourceNotFoundException("No movie found with this title");
+        }
+        else{
+            return movieMapper.mapMovieToDetailedMovieResponseDto(movie);
+        }
     }
 
     /**
