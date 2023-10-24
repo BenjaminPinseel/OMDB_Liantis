@@ -62,7 +62,7 @@ public class MovieService {
      * @return MovieResponseDto containing the details of the movie.
      * @throws NullPointerException if the API key is not found.
      */
-    public MovieResponseDto findByTitle(String title, String type, int year, String plot, String returnType) {
+    public MovieResponseDto findByTitle(String title, String type, Integer year, String plot, String returnType) {
         if (decryptedApiKey() == null) {
             throw new NullPointerException("API key was not found");
         }
