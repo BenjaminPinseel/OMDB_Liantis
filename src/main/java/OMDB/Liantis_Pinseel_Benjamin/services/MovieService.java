@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static java.lang.Boolean.parseBoolean;
+
 @Service
 @RequiredArgsConstructor
 public class MovieService {
@@ -42,7 +44,7 @@ public class MovieService {
             throw new NullPointerException("API key was not found");
         }
         Movie movie = movieClient.findById(decryptedApiKey(), id);
-        if (movie == null){
+        if (movie == null || (!Boolean.parseBoolean(movie.getResponse()))){
             throw new ResourceNotFoundException("No movie found with this id");
         }
         else{
@@ -67,7 +69,7 @@ public class MovieService {
             throw new NullPointerException("API key was not found");
         }
         Movie movie = movieClient.findByTitle(decryptedApiKey(), title, type, year, plot, returnType);
-        if (movie == null){
+        if (movie == null || (!Boolean.parseBoolean(movie.getResponse()))){
             throw new ResourceNotFoundException("No movie found with this title");
         }
         else{
