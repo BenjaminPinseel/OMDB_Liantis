@@ -8,8 +8,9 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class UserResponseDto {
-    public String firstName;
-    public String lastName;
-    public String nickName;
-    public int age;
+    private String id;
+    private String firstName;
+    private String lastName;
+    private String nickName;
+    private int age;
 }

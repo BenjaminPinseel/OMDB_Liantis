@@ -56,6 +56,7 @@ public class MovieServiceTest {
                 .poster("")
                 .year("2001")
                 .imdbID("123")
+                .response("True")
                 .build();
         MovieResponseDto movieResponseDto = MovieResponseDto.builder()
                 .title(movie.getTitle())
@@ -111,6 +112,7 @@ public class MovieServiceTest {
                 .rated("PG")
                 .writer("William Steig (based upon the book by), Ted Elliott, Terry Rossio, Joe Stillman, Roger S.H. Schulman, Cody Cameron, Chris Miller, Conrad Vernon")
                 .poster("https://m.media-amazon.com/images/M/MV5BMTYwOTMwNjk4OF5BMl5BanBnXkFtZTgwMTkxNjMwMDE@._V1_SX300.jpg")
+                .response("True")
                 .build();
         MovieResponseDto movieResponseDto = MovieResponseDto.builder()
                 .title(movie.getTitle())

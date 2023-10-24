@@ -49,7 +49,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public UserResponseDto update(@PathVariable String id, @RequestBody @Validated(Update.class) UserUpdateRequestDto userUpdateRequestDto) {
+    public UserResponseDto update(@PathVariable String id, @RequestBody @Valid UserUpdateRequestDto userUpdateRequestDto) {
         User updatedUser = this.userService.update(id, userUpdateRequestDto);
 
         return mapper.mapUserToUserResponseDto(updatedUser);
