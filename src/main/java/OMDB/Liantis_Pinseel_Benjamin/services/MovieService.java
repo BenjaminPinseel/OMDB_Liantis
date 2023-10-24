@@ -5,6 +5,7 @@ import OMDB.Liantis_Pinseel_Benjamin.clients.MovieClient;
 import OMDB.Liantis_Pinseel_Benjamin.dto.MovieListDto;
 import OMDB.Liantis_Pinseel_Benjamin.dto.MovieResponseDto;
 import OMDB.Liantis_Pinseel_Benjamin.dto.PageDto;
+import OMDB.Liantis_Pinseel_Benjamin.exceptions.ResourceNotFoundException;
 import OMDB.Liantis_Pinseel_Benjamin.helpers.EncryptionUtils;
 import OMDB.Liantis_Pinseel_Benjamin.mappers.MovieMapper;
 import lombok.RequiredArgsConstructor;
@@ -78,14 +79,19 @@ public class MovieService {
             throw new NullPointerException("API key was not found");
         }
         MovieListDto movieListDto = movieClient.findAll(decryptedApiKey(), title, type, year, page);
-        Set<MovieResponseDto> responseDtos = movieListDto.getSearch().stream()
-                .map(movie -> movieMapper.mapMovieToMovieShortResponseDto(movie))
-                .collect(Collectors.toSet());
-        int totalPages = (int) Math.ceil((double) movieListDto.getTotalResults() / 10);
-        return new PageDto<MovieResponseDto>(
-                totalPages,
-                movieListDto.getTotalResults(),
-                responseDtos
-        );
+        if (movieListDto == null){
+            throw new ResourceNotFoundException("No movies found");
+        }
+        else{
+            Set<MovieResponseDto> responseDtos = movieListDto.getSearch().stream()
+                    .map(movie -> movieMapper.mapMovieToMovieShortResponseDto(movie))
+                    .collect(Collectors.toSet());
+            int totalPages = (int) Math.ceil((double) movieListDto.getTotalResults() / 10);
+            return new PageDto<MovieResponseDto>(
+                    totalPages,
+                    movieListDto.getTotalResults(),
+                    responseDtos
+            );
+        }
     }
 }

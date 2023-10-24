@@ -51,10 +51,10 @@ class MovieControllerTest {
                 .poster(movie.getPoster())
                 .year(movie.getYear())
                 .build();
-        when(movieService.findById(movie.getImdbID(), movie.getType(), Integer.parseInt(movie.getYear()), "short","json")).thenReturn(movieResponseDto);
+        when(movieService.findById(movie.getImdbID())).thenReturn(movieResponseDto);
 
         // Act
-        MovieResponseDto result = movieController.findById(movie.getImdbID(), movie.getType(), Integer.parseInt(movie.getYear()), "short","json");
+        MovieResponseDto result = movieController.findById(movie.getImdbID());
 
         // Assert
         assertEquals(movieResponseDto, result);

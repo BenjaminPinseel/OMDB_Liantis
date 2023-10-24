@@ -28,7 +28,7 @@ public class MovieController {
     @GetMapping("/title/{title}")
     public MovieResponseDto findByTitle(@PathVariable final String title,
                                         @RequestParam(required = false) final String type,
-                                        @RequestParam(required = false) final int year,
+                                        @RequestParam(required = false) final Integer year,
                                         @RequestParam(required = false) final String plot,
                                         @RequestParam(required = false) final String returnType
     ) {
