@@ -96,3 +96,6 @@ Currently the encrypt method is still in place, for a possibility to re-encrypt 
 Eventually when user authentication is added, this would be removed.
 3. Currently the userId is added in the header of requests, to have some form of security at the moment.
 4. WatchlistControllerIntegrationTest was not added because of lack of time.
+5. Chosen for monolith design pattern since for a small project like this, the pro's don't outweigh the cons of using microservices
+6. Tests use Mockito to mock dependencies, while the integrationtests use an H2 in-memory database to fully test the flow, while not disrupting the data in the "real" database.
+7. In case, for some unknown reason, the deryption of the APIkey would not work, this is the decrypted APIkey: bbe0303c
