@@ -5,11 +5,12 @@ import OMDB.Liantis_Pinseel_Benjamin.dto.WatchlistResponseDto;
 import OMDB.Liantis_Pinseel_Benjamin.entities.Watchlist;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class WatchlistMapperTest {
 
     private final WatchlistMapper watchlistMapper = new WatchlistMapper();
+
     @Test
     void testMapWatchlistCreateDtoToWatchlist() {
         WatchlistCreateDto watchlistCreateDto = WatchlistCreateDto.builder()

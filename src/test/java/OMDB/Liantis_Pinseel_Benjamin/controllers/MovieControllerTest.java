@@ -14,7 +14,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -85,10 +86,10 @@ class MovieControllerTest {
                 .poster(movie.getPoster())
                 .year(movie.getYear())
                 .build();
-        when(movieService.findByTitle(movie.getTitle(), movie.getType(), Integer.parseInt(movie.getYear()), "short","json")).thenReturn(movieResponseDto);
+        when(movieService.findByTitle(movie.getTitle(), movie.getType(), Integer.parseInt(movie.getYear()), "short", "json")).thenReturn(movieResponseDto);
 
         // Act
-        MovieResponseDto result = movieController.findByTitle(movie.getTitle(), movie.getType(), Integer.parseInt(movie.getYear()), "short","json");
+        MovieResponseDto result = movieController.findByTitle(movie.getTitle(), movie.getType(), Integer.parseInt(movie.getYear()), "short", "json");
 
         // Assert
         assertEquals(movieResponseDto, result);

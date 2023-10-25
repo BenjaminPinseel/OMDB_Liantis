@@ -6,7 +6,6 @@ import OMDB.Liantis_Pinseel_Benjamin.dto.MovieResponseDto;
 import OMDB.Liantis_Pinseel_Benjamin.dto.WatchlistCreateDto;
 import OMDB.Liantis_Pinseel_Benjamin.dto.WatchlistResponseDto;
 import OMDB.Liantis_Pinseel_Benjamin.dto.WatchlistUpdateRequestDto;
-import OMDB.Liantis_Pinseel_Benjamin.entities.User;
 import OMDB.Liantis_Pinseel_Benjamin.entities.Watchlist;
 import OMDB.Liantis_Pinseel_Benjamin.exceptions.ResourceNotFoundException;
 import OMDB.Liantis_Pinseel_Benjamin.helpers.EncryptionUtils;

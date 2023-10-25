@@ -18,13 +18,28 @@ import org.springframework.web.bind.annotation.*;
 public class MovieController {
     private final MovieService movieService;
 
-
+    /**
+     * Retrieve a movie by its unique identifier.
+     *
+     * @param id The unique identifier of the movie.
+     * @return MovieResponseDto containing information about the movie.
+     */
     @GetMapping("/id/{id}")
     public MovieResponseDto findById(@PathVariable @NotNull @NotBlank String id
     ) {
         return movieService.findById(id);
     }
 
+    /**
+     * Retrieve a movie by its title with optional parameters.
+     *
+     * @param title      The title of the movie.
+     * @param type       Optional type of the movie.
+     * @param year       Optional year of the movie.
+     * @param plot       Optional plot details of the movie.
+     * @param returnType Optional return type of the response.
+     * @return MovieResponseDto containing information about the movie.
+     */
     @GetMapping("/title/{title}")
     public MovieResponseDto findByTitle(@PathVariable final String title,
                                         @RequestParam(required = false) final String type,
@@ -35,6 +50,15 @@ public class MovieController {
         return movieService.findByTitle(title, type, year, plot, returnType);
     }
 
+    /**
+     * Retrieve a list of movies based on specified parameters.
+     *
+     * @param title The title of the movie.
+     * @param type  Optional type of the movie.
+     * @param year  Optional year of the movie.
+     * @param page  Optional page number for pagination (default value: 1).
+     * @return PageDto<MovieResponseDto> containing a list of movies.
+     */
     @GetMapping({"/", ""})
     public PageDto<MovieResponseDto> findAll(
             @RequestParam() final String title,

@@ -49,7 +49,7 @@ class UserControllerIntegrationTest {
                 .totalElements(1)
                 .responseDtos(userResponseDtos)
                 .build();
-        when(userService.findAll(1, 10 )).thenReturn(Page.empty());
+        when(userService.findAll(1, 10)).thenReturn(Page.empty());
         when(userMapper.mapToPageDto(any())).thenReturn(pageDto);
 
         // Act
